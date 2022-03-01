@@ -1,6 +1,6 @@
 # Wind Chill App
 
-A small simple project to practice mobile development and UI design. In particular, it's about solidifying my React Native skills.
+A small simple project to practice mobile development and UI design. In particular, it's about solidifying my Typescript and React Native skills.
 
 This app is based on an [app idea of similar name.](https://github.com/florinpop17/app-ideas/blob/master/Projects/1-Beginner/Windchill-App.md)
 
@@ -23,3 +23,10 @@ This app is based on an [app idea of similar name.](https://github.com/florinpop
 - [ ] User will be prompted to enter new data values if `Calculate` is pressed without first changing at least one of the input fields
 
 - [ ] User will see an updated wind chill factor whenever new actual temperature or wind speed values are entered, without being required to click the `Calculate` button
+
+## Tools
+
+- Typescript;
+- React Native;
+- FluentUI;
+- Expo.
