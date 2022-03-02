@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     paddingVertical: 64,
     height: "100%",
+    backgroundColor: THEME.COLORS.BACKGROUND,
   },
   header: {
     display: "flex",
@@ -53,7 +54,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     marginHorizontal: "auto",
-    backgroundColor: "#FFFFFF",
   },
   btnCalculate: {
     flex: 1,
