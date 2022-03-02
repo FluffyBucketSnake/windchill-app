@@ -2,6 +2,8 @@ export const THEME = {
     COLORS: {
         PRIMARY: '#0078D4',
         PRIMARY_ALT: '#0086F0',
+        SECONDARY: '#3AA0F3',
+        SECONDARY_ALT: '#6CB8F6',
         PRIMARY_FOREGROUND: '#000000',
         FOREGROUND: '#F1F1F1',
         FOREGROUND_ALT: '#919191',

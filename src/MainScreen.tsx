@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View } from "react-native";
 import { TextBox } from "./TextBox";
 import { THEME } from "./theme";
-import { Button } from "./Button";
+import { Button, ButtonVariant } from "./Button";
 
 export const MainScreen: React.FC = () => (
   <SafeAreaView style={styles.mainPage}>
@@ -21,7 +21,7 @@ export const MainScreen: React.FC = () => (
     </View>
     <View style={styles.footer}>
       <Button style={styles.btnCalculate}>Calculate</Button>
-      <Button>Options</Button>
+      <Button variant={ButtonVariant.Secondary}>Options</Button>
     </View>
   </SafeAreaView>
 );

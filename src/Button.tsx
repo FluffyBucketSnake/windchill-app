@@ -9,16 +9,23 @@ import {
 } from "react-native";
 import { THEME } from "./theme";
 
+export enum ButtonVariant {
+  Primary,
+  Secondary,
+}
+
 export interface IButtonProps {
   children?: string;
   onClick?: (event: GestureResponderEvent) => void;
   style?: ViewStyle;
+  variant?: ButtonVariant;
 }
 
 export const Button: React.FC<IButtonProps> = ({
   children,
   onClick,
   style,
+  variant = ButtonVariant.Primary,
 }) => {
   const [isActive, setActive] = useState(false);
   return (
@@ -27,7 +34,7 @@ export const Button: React.FC<IButtonProps> = ({
       onPressOut={() => setActive(false)}
       onPress={onClick}
     >
-      <View style={[styles.view, getFillColor(isActive), style]}>
+      <View style={[styles.view, getFillColor(variant, isActive), style]}>
         <Text style={styles.text}>{children}</Text>
       </View>
     </TouchableWithoutFeedback>
@@ -49,6 +56,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const getFillColor = (isActive: boolean) => ({
-  backgroundColor: isActive ? THEME.COLORS.PRIMARY_ALT : THEME.COLORS.PRIMARY,
+const getFillColor = (variant: ButtonVariant, isActive: boolean) => ({
+  backgroundColor:
+    variant == ButtonVariant.Primary
+      ? isActive
+        ? THEME.COLORS.PRIMARY_ALT
+        : THEME.COLORS.PRIMARY
+      : isActive
+      ? THEME.COLORS.SECONDARY_ALT
+      : THEME.COLORS.SECONDARY,
 });
