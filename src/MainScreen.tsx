@@ -41,10 +41,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headline: {
+    color: THEME.COLORS.FOREGROUND,
     ...THEME.FONT_SIZES.HEADLINE,
   },
   caption: {
     textAlign: "center",
+    color: THEME.COLORS.FOREGROUND_ALT,
     ...THEME.FONT_SIZES.BODY,
   },
   footer: {
