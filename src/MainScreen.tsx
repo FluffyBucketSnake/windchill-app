@@ -37,13 +37,15 @@ const styles = StyleSheet.create({
     backgroundColor: THEME.COLORS.BACKGROUND,
   },
   header: {
+    alignItems: "center",
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
   },
   headline: {
     color: THEME.COLORS.FOREGROUND,
+    fontFamily: THEME.FONTS.LIGHT,
     ...THEME.FONT_SIZES.HEADLINE,
+    marginBottom: 8,
   },
   caption: {
     textAlign: "center",

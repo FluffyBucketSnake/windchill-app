@@ -7,6 +7,11 @@ export const THEME = {
         FOREGROUND_ALT: '#919191',
         BACKGROUND: '#000000'
     },
+    FONTS: {
+        LIGHT: 'Roboto_300Light',
+        REGULAR: 'Roboto_400Regular',
+        MEDIUM: 'Roboto_500Medium',
+    },
     FONT_SIZES: {
         HEADLINE: { fontSize: 28, lineHeight: 33 },
         SUBHEADING: { fontSize: 16, lineHeight: 24 },

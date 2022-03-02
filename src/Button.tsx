@@ -42,8 +42,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   text: {
+    fontFamily: THEME.FONTS.MEDIUM,
     color: THEME.COLORS.PRIMARY_FOREGROUND,
     textTransform: "uppercase",
+    ...THEME.FONT_SIZES.BODY,
   },
 });
 
