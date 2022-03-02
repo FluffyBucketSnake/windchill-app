@@ -3,6 +3,7 @@
     "name": "windchill-app",
     "slug": "windchill-app",
     "version": "0.0.1",
+    "entryPoint": "./src/App.tsx",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
