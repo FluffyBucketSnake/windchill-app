@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useCallback, useRef, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { THEME } from "./theme";
 
 export interface ITextBoxProps {
@@ -8,17 +14,28 @@ export interface ITextBoxProps {
   suffix?: string;
 }
 
-export const TextBox: React.FC<ITextBoxProps> = ({ label, value, suffix }) => (
-  <View style={styles.textBoxView}>
-    <Text style={styles.textBoxLabel}>{label}</Text>
-    <TextInput
-      style={styles.textBoxInput}
-      value={value}
-      keyboardType="numeric"
-    />
-    <Text style={styles.textBoxInputSuffix}> {suffix}</Text>
-  </View>
-);
+export const TextBox: React.FC<ITextBoxProps> = ({ label, value, suffix }) => {
+  const refTextInput = useRef<TextInput>(null);
+  const focusTextInput = useCallback(
+    () => refTextInput.current?.focus(),
+    [refTextInput]
+  );
+
+  return (
+    <TouchableWithoutFeedback onPress={focusTextInput}>
+      <View style={styles.textBoxView}>
+        <Text style={styles.textBoxLabel}>{label}</Text>
+        <TextInput
+          style={styles.textBoxInput}
+          value={value}
+          keyboardType="numeric"
+          ref={refTextInput}
+        />
+        <Text style={styles.textBoxInputSuffix}> {suffix}</Text>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
 
 const styles = StyleSheet.create({
   textBoxView: {
