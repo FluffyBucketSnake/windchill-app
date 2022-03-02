@@ -1,7 +1,7 @@
 export const THEME = {
     COLORS: {
-        PRIMARY: '#0086F0',
-        PRIMARY_ALT: '#092C47',
+        PRIMARY: '#0078D4',
+        PRIMARY_ALT: '#0086F0',
         PRIMARY_FOREGROUND: '#000000',
         FOREGROUND: '#F1F1F1',
         FOREGROUND_ALT: '#919191',

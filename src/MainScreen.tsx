@@ -1,8 +1,9 @@
 import React from "react";
 import { StatusBar } from "expo-status-bar";
-import { Button, Text, SafeAreaView, StyleSheet, View } from "react-native";
+import { Text, SafeAreaView, StyleSheet, View } from "react-native";
 import { TextBox } from "./TextBox";
 import { THEME } from "./theme";
+import { Button } from "./Button";
 
 export const MainScreen: React.FC = () => (
   <SafeAreaView style={styles.mainPage}>
@@ -18,8 +19,9 @@ export const MainScreen: React.FC = () => (
       <TextBox label="Actual temperature" suffix="ºC" />
       <TextBox label="Wind speed" suffix="km/h" />
     </View>
-    <View>
-      <Button title="Calculate" onPress={() => {}} />
+    <View style={styles.footer}>
+      <Button style={styles.btnCalculate}>Calculate</Button>
+      <Button>Options</Button>
     </View>
   </SafeAreaView>
 );
@@ -44,5 +46,15 @@ const styles = StyleSheet.create({
   caption: {
     textAlign: "center",
     ...THEME.FONT_SIZES.BODY,
+  },
+  footer: {
+    display: "flex",
+    flexDirection: "row",
+    marginHorizontal: "auto",
+    backgroundColor: "#FFFFFF",
+  },
+  btnCalculate: {
+    flex: 1,
+    marginRight: 8,
   },
 });
