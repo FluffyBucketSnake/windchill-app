@@ -28,5 +28,4 @@ This app is based on an [app idea of similar name.](https://github.com/florinpop
 
 - Typescript;
 - React Native;
-- FluentUI;
 - Expo.
