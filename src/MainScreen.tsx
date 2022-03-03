@@ -1,11 +1,11 @@
 import React, { useCallback, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View } from "react-native";
-import { TextBox } from "./TextBox";
 import { THEME } from "./theme";
-import { Button, ButtonVariant } from "./Button";
+import { Button } from "./Button";
 import { IconButton } from "./IconButton";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { ListNumericTextBox } from "./ListNumericTextBox";
 
 const optionsSnapPoints = [224];
 
@@ -16,31 +16,31 @@ export const MainScreen: React.FC = () => {
     []
   );
   return (
-  <SafeAreaView style={styles.mainPage}>
-    <StatusBar style="auto" />
-    <View style={styles.header}>
-      <Text style={styles.headline}>Wind chill calculator</Text>
-      <Text style={styles.caption}>
-        Calculate the perceived temperature by providing the actual temperature
-        and the wind speed
-      </Text>
-    </View>
-    <View>
-      <TextBox
-        icon="temperature_regular"
-        label="Actual temperature"
-        suffix="ºC"
-      />
-      <TextBox
-        icon="weather_squalls_regular"
-        label="Wind speed"
-        suffix="km/h"
-      />
-    </View>
-    <View style={styles.footer}>
-      <Button style={styles.btnCalculate}>Calculate</Button>
+    <SafeAreaView style={styles.mainPage}>
+      <StatusBar style="auto" />
+      <View style={styles.header}>
+        <Text style={styles.headline}>Wind chill calculator</Text>
+        <Text style={styles.caption}>
+          Calculate the perceived temperature by providing the actual
+          temperature and the wind speed
+        </Text>
+      </View>
+      <View>
+        <ListNumericTextBox
+          icon="temperature_regular"
+          label="Actual temperature"
+          suffix="ºC"
+        />
+        <ListNumericTextBox
+          icon="top_speed_regular"
+          label="Wind speed"
+          suffix="km/h"
+        />
+      </View>
+      <View style={styles.footer}>
+        <Button style={styles.btnCalculate}>Calculate</Button>
         <IconButton icon="options_filled" onPress={openOptions} />
-    </View>
+      </View>
       <BottomSheet
         backgroundStyle={styles.optionsBackground}
         enablePanDownToClose={true}
@@ -51,19 +51,19 @@ export const MainScreen: React.FC = () => {
       >
         <Text>T</Text>
       </BottomSheet>
-  </SafeAreaView>
-);
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
   mainPage: {
-    display: "flex",
-    justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: THEME.COLORS.BACKGROUND,
+    display: "flex",
+    flex: 1,
+    justifyContent: "space-between",
     paddingHorizontal: 32,
     paddingVertical: 64,
-    height: "100%",
-    backgroundColor: THEME.COLORS.BACKGROUND,
   },
   header: {
     alignItems: "center",
@@ -73,12 +73,12 @@ const styles = StyleSheet.create({
   headline: {
     color: THEME.COLORS.FOREGROUND,
     fontFamily: THEME.FONTS.LIGHT,
-    ...THEME.FONT_SIZES.HEADLINE,
     marginBottom: 8,
+    ...THEME.FONT_SIZES.HEADLINE,
   },
   caption: {
-    textAlign: "center",
     color: THEME.COLORS.FOREGROUND_ALT,
+    textAlign: "center",
     ...THEME.FONT_SIZES.BODY,
   },
   footer: {
