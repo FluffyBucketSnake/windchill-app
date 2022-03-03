@@ -29,3 +29,9 @@ This app is based on an [app idea of similar name.](https://github.com/florinpop
 - Typescript;
 - React Native;
 - Expo.
+
+## Media content
+
+- Icons: [FluentUI](https://github.com/microsoft/fluentui-system-icons) by Microsoft
+
+- Background: [Pink and Blue Sky](https://www.pexels.com/photo/pink-and-blue-sky-1235398/) by Oleg Magni

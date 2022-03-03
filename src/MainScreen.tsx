@@ -1,12 +1,13 @@
 import React, { useCallback, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, SafeAreaView, StyleSheet, View } from "react-native";
+import { Text, SafeAreaView, StyleSheet, View, Image } from "react-native";
 import { THEME } from "./theme";
 import { Button, ButtonVariant } from "./Button";
 import { IconButton } from "./IconButton";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { ListNumericTextBox } from "./ListNumericTextBox";
 import { ListComboBox } from "./ListComboBox";
+import { BlurView } from "expo-blur";
 
 const optionsSnapPoints = [224];
 
@@ -17,74 +18,90 @@ export const MainScreen: React.FC = () => {
     []
   );
   return (
-    <SafeAreaView style={styles.mainPage}>
+    <SafeAreaView style={styles.body}>
       <StatusBar style="auto" />
-      <View style={styles.header}>
-        <Text style={styles.headline}>Wind chill calculator</Text>
-        <Text style={styles.caption}>
-          Calculate the perceived temperature by providing the actual
-          temperature and the wind speed
-        </Text>
-      </View>
-      <View>
-        <ListNumericTextBox
-          icon="temperature_regular"
-          label="Actual temperature"
-          suffix="ºC"
-        />
-        <ListNumericTextBox
-          icon="weather_squalls_regular"
-          label="Wind speed"
-          suffix="km/h"
-        />
-      </View>
-      <View style={styles.footer}>
-        <Button style={styles.btnCalculate}>Calculate</Button>
-        <IconButton icon="options_filled" onPress={openOptions} />
-      </View>
-      <BottomSheet
-        backgroundStyle={styles.optionsBackground}
-        enablePanDownToClose={true}
-        handleIndicatorStyle={styles.optionsHandleIndicator}
-        index={-1}
-        ref={optionsModal}
-        snapPoints={optionsSnapPoints}
-      >
-        <BottomSheetView style={styles.optionsView}>
-          <View style={styles.optionsList}>
-            <Text style={styles.title}>Units</Text>
-            <ListComboBox
-              icon="temperature_regular"
-              label="Temperature"
-              options={[{ id: 0, name: "Celsius(ºC)" }]}
-              value={0}
-            />
-            <ListComboBox
-              icon="top_speed_regular"
-              label="Speed"
-              options={[{ id: 0, name: "Metric(km/h)" }]}
-              value={0}
-            />
-          </View>
-          <View style={styles.optionsFooter}>
-            <Button style={styles.optionsSave}>Save</Button>
-            <Button variant={ButtonVariant.Secondary}>Reset</Button>
-          </View>
-        </BottomSheetView>
-      </BottomSheet>
+      <Image
+        source={require("./assets/background.jpg")}
+        style={styles.background}
+      />
+      <BlurView intensity={100} style={styles.content} tint="dark">
+        <View style={styles.header}>
+          <Text style={styles.headline}>Wind chill calculator</Text>
+          <Text style={styles.caption}>
+            Calculate the perceived temperature by providing the actual
+            temperature and the wind speed
+          </Text>
+        </View>
+        <View>
+          <ListNumericTextBox
+            icon="temperature_regular"
+            label="Actual temperature"
+            suffix="ºC"
+          />
+          <ListNumericTextBox
+            icon="weather_squalls_regular"
+            label="Wind speed"
+            suffix="km/h"
+          />
+        </View>
+        <View style={styles.footer}>
+          <Button style={styles.btnCalculate}>Calculate</Button>
+          <IconButton icon="options_filled" onPress={openOptions} />
+        </View>
+        <BottomSheet
+          backgroundStyle={styles.optionsBackground}
+          enablePanDownToClose={true}
+          handleIndicatorStyle={styles.optionsHandleIndicator}
+          index={-1}
+          ref={optionsModal}
+          snapPoints={optionsSnapPoints}
+        >
+          <BottomSheetView style={styles.optionsView}>
+            <View style={styles.optionsList}>
+              <Text style={styles.title}>Units</Text>
+              <ListComboBox
+                icon="temperature_regular"
+                label="Temperature"
+                options={[{ id: 0, name: "Celsius(ºC)" }]}
+                value={0}
+              />
+              <ListComboBox
+                icon="top_speed_regular"
+                label="Speed"
+                options={[{ id: 0, name: "Metric(km/h)" }]}
+                value={0}
+              />
+            </View>
+            <View style={styles.optionsFooter}>
+              <Button style={styles.optionsSave}>Save</Button>
+              <Button variant={ButtonVariant.Secondary}>Reset</Button>
+            </View>
+          </BottomSheetView>
+        </BottomSheet>
+      </BlurView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  mainPage: {
-    alignItems: "center",
-    backgroundColor: THEME.COLORS.BACKGROUND,
-    display: "flex",
+  body: {
     flex: 1,
+  },
+  background: {
+    height: "100%",
+    aspectRatio: 1,
+    width: undefined,
+    zIndex: -1,
+  },
+  content: {
+    alignItems: "center",
+    display: "flex",
+    height: "100%",
     justifyContent: "space-between",
     paddingHorizontal: 32,
     paddingVertical: 64,
+    position: "absolute",
+    width: "100%",
   },
   header: {
     alignItems: "center",
