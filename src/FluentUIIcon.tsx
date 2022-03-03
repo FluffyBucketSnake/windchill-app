@@ -7,7 +7,8 @@ export type FluentUIIconName =
   | "temperature_regular"
   | "weather_squalls_regular"
   | "top_speed_regular"
-  | "options_filled";
+  | "options_filled"
+  | "chevron_down_regular";
 
 export interface FluentUIIconProps {
   color: ColorValue;

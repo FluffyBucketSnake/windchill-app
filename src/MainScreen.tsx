@@ -4,8 +4,9 @@ import { Text, SafeAreaView, StyleSheet, View } from "react-native";
 import { THEME } from "./theme";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { ListNumericTextBox } from "./ListNumericTextBox";
+import { ListComboBox } from "./ListComboBox";
 
 const optionsSnapPoints = [224];
 
@@ -32,7 +33,7 @@ export const MainScreen: React.FC = () => {
           suffix="ºC"
         />
         <ListNumericTextBox
-          icon="top_speed_regular"
+          icon="weather_squalls_regular"
           label="Wind speed"
           suffix="km/h"
         />
@@ -49,7 +50,21 @@ export const MainScreen: React.FC = () => {
         ref={optionsModal}
         snapPoints={optionsSnapPoints}
       >
-        <Text>T</Text>
+        <BottomSheetView style={styles.optionsView}>
+          <Text style={styles.title}>Units</Text>
+          <ListComboBox
+            icon="temperature_regular"
+            label="Temperature"
+            options={[{ id: 0, name: "Celsius(ºC)" }]}
+            value={0}
+          />
+          <ListComboBox
+            icon="top_speed_regular"
+            label="Speed"
+            options={[{ id: 0, name: "Metric(km/h)" }]}
+            value={0}
+          />
+        </BottomSheetView>
       </BottomSheet>
     </SafeAreaView>
   );
@@ -95,5 +110,16 @@ const styles = StyleSheet.create({
   },
   optionsHandleIndicator: {
     backgroundColor: THEME.COLORS.FOREGROUND_ALT,
+  },
+  optionsView: {
+    display: "flex",
+    flexDirection: "column",
+    padding: 16,
+  },
+  title: {
+    color: THEME.COLORS.FOREGROUND,
+    fontFamily: THEME.FONTS.REGULAR,
+    textAlign: "center",
+    ...THEME.FONT_SIZES.TITLE,
   },
 });

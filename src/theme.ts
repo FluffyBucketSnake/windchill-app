@@ -17,6 +17,7 @@ export const THEME = {
     },
     FONT_SIZES: {
         HEADLINE: { fontSize: 28, lineHeight: 33 },
+        TITLE: { fontSize: 20, lineHeight: 24 },
         SUBHEADING: { fontSize: 16, lineHeight: 24 },
         BODY: { fontSize: 14, lineHeight: 16 },
     }

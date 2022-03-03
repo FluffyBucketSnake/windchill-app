@@ -53,6 +53,18 @@
         "width": 1000
       },
       "search": ["ic_fluent_options_24_filled"]
+    },
+    {
+      "uid": "93a1ad86b1f6d49c9366c4d061cb8918",
+      "css": "chevron_down_regular",
+      "code": 62114,
+      "src": "custom_icons",
+      "selected": true,
+      "svg": {
+        "path": "M196 352Q206 344 219 344T240 352L500 612 760 352Q768 344 781 344T803 353 812 375 804 398L522 678Q512 688 500 688T478 678L196 398Q188 388 188 375T196 352Z",
+        "width": 1000
+      },
+      "search": ["ic_fluent_chevron_down_16_regular"]
     }
   ]
 }
