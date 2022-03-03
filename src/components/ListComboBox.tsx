@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Modal, StyleSheet, Text, View } from "react-native";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { FluentUIIcon } from "./FluentUIIcon";
 import { IListItemProps, ListItem } from "./ListItem";
-import { ListRadio } from "./ListRadio";
 import { THEME } from "../theme";
+import { SelectionModal } from "./SelectionModal";
 
 export interface IOption {
   id: number;
@@ -30,10 +30,10 @@ export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
 
   const openModal = useCallback(() => setModalVisible(true), []);
   const dismissModal = useCallback(() => setModalVisible(false), []);
-  const onSelect = (id: number) => () => {
-    setInnerValue(id);
+  const onChangeCallback = useCallback((option: IOption) => {
+    setInnerValue(option.id);
     dismissModal();
-  };
+  }, []);
 
   return (
     <>
@@ -51,40 +51,28 @@ export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
           </TouchableOpacity>
         </View>
       </ListItem>
-      <Modal
-        animationType="slide"
+      <SelectionModal
+        keyExtractor={({ id }) => id}
+        nameExtrator={({ name }) => name}
+        onChange={onChangeCallback}
         onRequestClose={dismissModal}
-        transparent={true}
+        options={options}
+        title={modalTitle}
+        value={value}
         visible={modalVisible}
-      >
-        <View style={styles.modal}>
-          <View style={styles.modalDialog}>
-            {modalTitle && <Text style={styles.modalTitle}>{modalTitle}</Text>}
-            <FlatList
-              data={options}
-              keyExtractor={(option) => String(option.id)}
-              renderItem={({ item }) => (
-                <ListRadio
-                  text={item.name}
-                  selected={item.id === innerValue}
-                  onPress={onSelect(item.id)}
-                />
-              )}
-            />
-          </View>
-        </View>
-      </Modal>
+      />
     </>
   );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   view: {
     alignItems: "center",
     display: "flex",
     flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
+    paddingHorizontal: 8,
   },
   inner: {
     alignItems: "center",
@@ -92,7 +80,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
-    paddingHorizontal: 8,
   },
   text: {
     color: THEME.COLORS.FOREGROUND,
@@ -103,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
-  modalDialog: {
+  dialog: {
     alignItems: "stretch",
     backgroundColor: THEME.COLORS.BACKGROUND_ALT,
     borderRadius: 12,
@@ -111,7 +98,7 @@ const styles = StyleSheet.create({
     marginVertical: "auto",
     padding: 16,
   },
-  modalTitle: {
+  title: {
     color: THEME.COLORS.FOREGROUND,
     fontFamily: THEME.FONTS.MEDIUM,
     textAlign: "center",
