@@ -1,14 +1,10 @@
-import BottomSheet, {
-  BottomSheetFlatList,
-  BottomSheetModal,
-} from "@gorhom/bottom-sheet";
 import React, { useCallback, useRef, useState } from "react";
 import { Modal, StyleSheet, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { FluentUIIcon } from "./FluentUIIcon";
 import { IListItemProps, ListItem } from "./ListItem";
 import { RadioItem } from "./RadioItem";
-import { THEME } from "./theme";
+import { THEME } from "../theme";
 
 export interface IOption {
   id: number;

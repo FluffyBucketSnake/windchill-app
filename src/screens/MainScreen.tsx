@@ -1,12 +1,12 @@
 import React, { useCallback, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View, Image } from "react-native";
-import { THEME } from "./theme";
-import { Button, ButtonVariant } from "./Button";
-import { IconButton } from "./IconButton";
+import { THEME } from "../theme";
+import { Button, ButtonVariant } from "../components/Button";
+import { IconButton } from "../components/IconButton";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { ListNumericTextBox } from "./ListNumericTextBox";
-import { ListComboBox } from "./ListComboBox";
+import { ListNumericTextBox } from "../components/ListNumericTextBox";
+import { ListComboBox } from "../components/ListComboBox";
 import { BlurView } from "expo-blur";
 
 const optionsSnapPoints = [224];
@@ -21,7 +21,7 @@ export const MainScreen: React.FC = () => {
     <SafeAreaView style={styles.body}>
       <StatusBar style="auto" />
       <Image
-        source={require("./assets/background.jpg")}
+        source={require("../assets/background.jpg")}
         style={styles.background}
       />
       <BlurView intensity={100} style={styles.content} tint="dark">

@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, ViewProps } from "react-native";
+import { ViewProps } from "react-native";
 import { BaseListItem } from "./BaseListItem";
 import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
-import { THEME } from "./theme";
+import { THEME } from "../theme";
 
 export interface IListItemProps {
   icon?: FluentUIIconName;

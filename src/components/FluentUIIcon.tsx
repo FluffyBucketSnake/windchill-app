@@ -1,7 +1,7 @@
 import { createIconSetFromFontello } from "@expo/vector-icons";
 import React from "react";
 import { ColorValue, ViewStyle } from "react-native";
-import FluentUIConfig from "./assets/fonts/fluentui/config.json";
+import FluentUIConfig from "../assets/fonts/fluentui/config.json";
 
 export type FluentUIIconName =
   | "temperature_regular"

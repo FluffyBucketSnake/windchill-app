@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
-import { THEME } from "./theme";
+import { THEME } from "../theme";
 
 export interface IIconButtonProps {
   icon: FluentUIIconName;

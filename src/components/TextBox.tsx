@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,8 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
-import { THEME } from "./theme";
+import { THEME } from "../theme";
 
 export interface ITextBoxProps {
   suffix?: string;

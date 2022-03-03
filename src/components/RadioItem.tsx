@@ -5,7 +5,7 @@ import {
   View,
 } from "react-native";
 import { BaseListItem } from "./BaseListItem";
-import { THEME } from "./theme";
+import { THEME } from "../theme";
 
 export interface IRadioItemProps {
   text: string;

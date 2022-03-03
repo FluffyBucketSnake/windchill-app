@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TextStyle, View, ViewProps } from "react-native";
 import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
-import { THEME } from "./theme";
+import { THEME } from "../theme";
 
 export interface IBaseListItemProps {
   iconComponent?: React.ReactNode;

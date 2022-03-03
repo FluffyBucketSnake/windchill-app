@@ -7,7 +7,7 @@ import {
   GestureResponderEvent,
   ViewStyle,
 } from "react-native";
-import { THEME } from "./theme";
+import { THEME } from "../theme";
 
 export enum ButtonVariant {
   Primary,
