@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View } from "react-native";
 import { THEME } from "./theme";
-import { Button } from "./Button";
+import { Button, ButtonVariant } from "./Button";
 import { IconButton } from "./IconButton";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { ListNumericTextBox } from "./ListNumericTextBox";
@@ -51,19 +51,25 @@ export const MainScreen: React.FC = () => {
         snapPoints={optionsSnapPoints}
       >
         <BottomSheetView style={styles.optionsView}>
-          <Text style={styles.title}>Units</Text>
-          <ListComboBox
-            icon="temperature_regular"
-            label="Temperature"
-            options={[{ id: 0, name: "Celsius(ºC)" }]}
-            value={0}
-          />
-          <ListComboBox
-            icon="top_speed_regular"
-            label="Speed"
-            options={[{ id: 0, name: "Metric(km/h)" }]}
-            value={0}
-          />
+          <View style={styles.optionsList}>
+            <Text style={styles.title}>Units</Text>
+            <ListComboBox
+              icon="temperature_regular"
+              label="Temperature"
+              options={[{ id: 0, name: "Celsius(ºC)" }]}
+              value={0}
+            />
+            <ListComboBox
+              icon="top_speed_regular"
+              label="Speed"
+              options={[{ id: 0, name: "Metric(km/h)" }]}
+              value={0}
+            />
+          </View>
+          <View style={styles.optionsFooter}>
+            <Button style={styles.optionsSave}>Save</Button>
+            <Button variant={ButtonVariant.Secondary}>Reset</Button>
+          </View>
         </BottomSheetView>
       </BottomSheet>
     </SafeAreaView>
@@ -121,5 +127,19 @@ const styles = StyleSheet.create({
     fontFamily: THEME.FONTS.REGULAR,
     textAlign: "center",
     ...THEME.FONT_SIZES.TITLE,
+  },
+  optionsFooter: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+  },
+  optionsList: {
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: 16,
+  },
+  optionsSave: {
+    flex: 1,
+    marginRight: 8,
   },
 });
