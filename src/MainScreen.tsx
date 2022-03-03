@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View } from "react-native";
 import { TextBox } from "./TextBox";
 import { THEME } from "./theme";
 import { Button, ButtonVariant } from "./Button";
 import { IconButton } from "./IconButton";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
-export const MainScreen: React.FC = () => (
+const optionsSnapPoints = [224];
+
+export const MainScreen: React.FC = () => {
+  const optionsModal = useRef<BottomSheet>(null);
+  const openOptions = useCallback(
+    () => optionsModal.current?.snapToIndex(0),
+    []
+  );
+  return (
   <SafeAreaView style={styles.mainPage}>
     <StatusBar style="auto" />
     <View style={styles.header}>
@@ -30,10 +39,21 @@ export const MainScreen: React.FC = () => (
     </View>
     <View style={styles.footer}>
       <Button style={styles.btnCalculate}>Calculate</Button>
-      <IconButton icon="options_filled" />
+        <IconButton icon="options_filled" onPress={openOptions} />
     </View>
+      <BottomSheet
+        backgroundStyle={styles.optionsBackground}
+        enablePanDownToClose={true}
+        handleIndicatorStyle={styles.optionsHandleIndicator}
+        index={-1}
+        ref={optionsModal}
+        snapPoints={optionsSnapPoints}
+      >
+        <Text>T</Text>
+      </BottomSheet>
   </SafeAreaView>
 );
+};
 
 const styles = StyleSheet.create({
   mainPage: {
@@ -69,5 +89,11 @@ const styles = StyleSheet.create({
   btnCalculate: {
     flex: 1,
     marginRight: 8,
+  },
+  optionsBackground: {
+    backgroundColor: THEME.COLORS.BACKGROUND_ALT,
+  },
+  optionsHandleIndicator: {
+    backgroundColor: THEME.COLORS.FOREGROUND_ALT,
   },
 });

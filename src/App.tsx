@@ -9,6 +9,7 @@ import {
 } from "@expo-google-fonts/roboto";
 import AppLoading from "expo-app-loading";
 import FluentUI from "./assets/fonts/fluentui/fluentui.ttf";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 function App() {
   const [areFontsLoaded] = useFonts({
@@ -22,7 +23,11 @@ function App() {
     return <AppLoading />;
   }
 
-  return <MainScreen />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <MainScreen />
+    </GestureHandlerRootView>
+  );
 }
 
 export default registerRootComponent(App);

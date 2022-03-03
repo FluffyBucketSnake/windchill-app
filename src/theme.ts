@@ -7,7 +7,8 @@ export const THEME = {
         PRIMARY_FOREGROUND: '#000000',
         FOREGROUND: '#F1F1F1',
         FOREGROUND_ALT: '#919191',
-        BACKGROUND: '#000000'
+        BACKGROUND: '#000000',
+        BACKGROUND_ALT: '#212121'
     },
     FONTS: {
         LIGHT: 'Roboto_300Light',
