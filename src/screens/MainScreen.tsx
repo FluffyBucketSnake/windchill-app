@@ -5,7 +5,7 @@ import { THEME } from "../theme";
 import { Button, ButtonVariant } from "../components/Button";
 import { IconButton } from "../components/IconButton";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { ListNumericTextBox } from "../components/ListNumericTextBox";
+import { ListTextBox } from "../components/ListTextBox";
 import { ListComboBox } from "../components/ListComboBox";
 import { BlurView } from "expo-blur";
 
@@ -33,14 +33,16 @@ export const MainScreen: React.FC = () => {
           </Text>
         </View>
         <View>
-          <ListNumericTextBox
+          <ListTextBox
             icon="temperature_regular"
             labelText="Actual temperature"
+            keyboardType="numeric"
             suffix="ºC"
           />
-          <ListNumericTextBox
+          <ListTextBox
             icon="weather_squalls_regular"
             labelText="Wind speed"
+            keyboardType="numeric"
             suffix="km/h"
           />
         </View>

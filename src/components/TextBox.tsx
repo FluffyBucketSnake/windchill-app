@@ -1,34 +1,38 @@
 import React, { useCallback, useRef } from "react";
 import {
+  KeyboardTypeOptions,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { THEME } from "../theme";
 
 export interface ITextBoxProps {
+  keyboardType?: KeyboardTypeOptions;
   suffix?: string;
   value?: string;
 }
 
-export const NumericTextBox: React.FC<ITextBoxProps> = ({ value, suffix }) => {
+export const TextBox: React.FC<ITextBoxProps> = ({
+  keyboardType,
+  suffix,
+  value,
+}) => {
   const refTextInput = useRef<TextInput>(null);
   const focusTextInput = useCallback(() => refTextInput.current?.focus(), []);
 
   return (
-    <TouchableWithoutFeedback onPress={focusTextInput}>
-      <View style={styles.view}>
-        <TextInput
-          style={styles.input}
-          value={value}
-          keyboardType="numeric"
-          ref={refTextInput}
-        />
-        <Text style={styles.suffix}> {suffix}</Text>
-      </View>
-    </TouchableWithoutFeedback>
+    <Pressable onPress={focusTextInput} style={styles.view}>
+      <TextInput
+        style={styles.input}
+        value={value}
+        keyboardType={keyboardType}
+        ref={refTextInput}
+      />
+      <Text style={styles.suffix}> {suffix}</Text>
+    </Pressable>
   );
 };
 
@@ -36,7 +40,6 @@ const styles = StyleSheet.create({
   view: {
     alignItems: "center",
     display: "flex",
-    flex: 1,
     flexDirection: "row",
   },
   input: {
