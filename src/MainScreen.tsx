@@ -35,12 +35,12 @@ export const MainScreen: React.FC = () => {
         <View>
           <ListNumericTextBox
             icon="temperature_regular"
-            label="Actual temperature"
+            labelText="Actual temperature"
             suffix="ºC"
           />
           <ListNumericTextBox
             icon="weather_squalls_regular"
-            label="Wind speed"
+            labelText="Wind speed"
             suffix="km/h"
           />
         </View>
@@ -61,14 +61,22 @@ export const MainScreen: React.FC = () => {
               <Text style={styles.title}>Units</Text>
               <ListComboBox
                 icon="temperature_regular"
-                label="Temperature"
-                options={[{ id: 0, name: "Celsius(ºC)" }]}
+                labelText="Temperature"
+                modalTitle="Select the desired unit"
+                options={[
+                  { id: 0, name: "Celsius(ºC)" },
+                  { id: 1, name: "Fahrenheit(ºF)" },
+                ]}
                 value={0}
               />
               <ListComboBox
                 icon="top_speed_regular"
-                label="Speed"
-                options={[{ id: 0, name: "Metric(km/h)" }]}
+                labelText="Speed"
+                modalTitle="Select the desired unit"
+                options={[
+                  { id: 0, name: "Metric(km/h)" },
+                  { id: 1, name: "Imperial(mph)" },
+                ]}
                 value={0}
               />
             </View>

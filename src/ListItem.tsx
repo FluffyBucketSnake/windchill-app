@@ -1,61 +1,28 @@
 import React from "react";
 import { StyleSheet, Text, View, ViewProps } from "react-native";
+import { BaseListItem } from "./BaseListItem";
 import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
 import { THEME } from "./theme";
 
 export interface IListItemProps {
   icon?: FluentUIIconName;
-  label: string;
+  labelText: string;
 }
 
-export const ListItem: React.FC<IListItemProps & ViewProps> = ({
+export type ListItemProps = IListItemProps & ViewProps;
+
+export const ListItem: React.FC<ListItemProps> = ({
   children,
   icon,
-  label,
-  style,
   ...props
 }) => {
+  const iconComponent = icon && (
+    <FluentUIIcon name={icon} size={24} color={THEME.COLORS.FOREGROUND_ALT} />
+  );
+
   return (
-    <View style={[styles.view, style]} {...props}>
-      {icon && (
-        <FluentUIIcon
-          style={styles.icon}
-          name={icon}
-          size={24}
-          color={THEME.COLORS.FOREGROUND_ALT}
-        />
-      )}
-      <View style={styles.content}>
-        <Text style={styles.label}>{label}</Text>
-        {children}
-      </View>
-    </View>
+    <BaseListItem iconComponent={iconComponent} {...props}>
+      {children}
+    </BaseListItem>
   );
 };
-
-const styles = StyleSheet.create({
-  view: {
-    alignItems: "center",
-    display: "flex",
-    flexDirection: "row",
-    height: 48,
-    width: "100%",
-  },
-  icon: {
-    marginHorizontal: 16,
-  },
-  content: {
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderColor: THEME.COLORS.FOREGROUND_ALT,
-    flex: 1,
-    display: "flex",
-    flexDirection: "row",
-    height: 48,
-    marginHorizontal: 16,
-  },
-  label: {
-    color: THEME.COLORS.FOREGROUND_ALT,
-    ...THEME.FONT_SIZES.SUBHEADING,
-  },
-});
