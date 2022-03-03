@@ -4,6 +4,7 @@ import { Text, SafeAreaView, StyleSheet, View } from "react-native";
 import { TextBox } from "./TextBox";
 import { THEME } from "./theme";
 import { Button, ButtonVariant } from "./Button";
+import { IconButton } from "./IconButton";
 
 export const MainScreen: React.FC = () => (
   <SafeAreaView style={styles.mainPage}>
@@ -29,7 +30,7 @@ export const MainScreen: React.FC = () => (
     </View>
     <View style={styles.footer}>
       <Button style={styles.btnCalculate}>Calculate</Button>
-      <Button variant={ButtonVariant.Secondary}>Options</Button>
+      <IconButton icon="options_filled" />
     </View>
   </SafeAreaView>
 );
