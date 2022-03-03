@@ -1,6 +1,6 @@
 import {
   GestureResponderEvent,
-  Pressable,
+  TouchableOpacity,
   StyleSheet,
   View,
 } from "react-native";
@@ -20,12 +20,14 @@ export const RadioItem: React.FC<RadioItemProps> = ({
   onPress,
   selected,
 }) => (
-  <Pressable onPress={onPress}>
-    <BaseListItem
-      labelText={text}
-      iconComponent={<RadioIcon selected={selected} />}
-    />
-  </Pressable>
+  <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
+    <View>
+      <BaseListItem
+        labelText={text}
+        iconComponent={<RadioIcon selected={selected} />}
+      />
+    </View>
+  </TouchableOpacity>
 );
 
 type RadioIconProps = {
