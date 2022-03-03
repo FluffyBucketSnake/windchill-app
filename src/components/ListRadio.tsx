@@ -15,7 +15,7 @@ export interface IRadioItemProps {
 
 export type RadioItemProps = IRadioItemProps;
 
-export const RadioItem: React.FC<RadioItemProps> = ({
+export const ListRadio: React.FC<RadioItemProps> = ({
   text,
   onPress,
   selected,
@@ -24,6 +24,7 @@ export const RadioItem: React.FC<RadioItemProps> = ({
     <View>
       <BaseListItem
         labelText={text}
+        labelStyle={styles.label}
         iconComponent={<RadioIcon selected={selected} />}
       />
     </View>
@@ -71,3 +72,9 @@ const getRadioStyle = (selected: boolean) =>
           display: "none",
         },
   });
+
+const styles = StyleSheet.create({
+  label: {
+    color: THEME.COLORS.FOREGROUND,
+  },
+});

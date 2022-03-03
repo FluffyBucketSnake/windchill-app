@@ -3,7 +3,7 @@ import { Modal, StyleSheet, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { FluentUIIcon } from "./FluentUIIcon";
 import { IListItemProps, ListItem } from "./ListItem";
-import { RadioItem } from "./RadioItem";
+import { ListRadio } from "./ListRadio";
 import { THEME } from "../theme";
 
 export interface IOption {
@@ -52,6 +52,7 @@ export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
         </View>
       </ListItem>
       <Modal
+        animationType="slide"
         onRequestClose={dismissModal}
         transparent={true}
         visible={modalVisible}
@@ -63,7 +64,7 @@ export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
               data={options}
               keyExtractor={(option) => String(option.id)}
               renderItem={({ item }) => (
-                <RadioItem
+                <ListRadio
                   text={item.name}
                   selected={item.id === innerValue}
                   onPress={onSelect(item.id)}
