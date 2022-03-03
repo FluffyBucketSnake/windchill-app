@@ -16,8 +16,16 @@ export const MainScreen: React.FC = () => (
       </Text>
     </View>
     <View>
-      <TextBox label="Actual temperature" suffix="ºC" />
-      <TextBox label="Wind speed" suffix="km/h" />
+      <TextBox
+        icon="temperature_regular"
+        label="Actual temperature"
+        suffix="ºC"
+      />
+      <TextBox
+        icon="weather_squalls_regular"
+        label="Wind speed"
+        suffix="km/h"
+      />
     </View>
     <View style={styles.footer}>
       <Button style={styles.btnCalculate}>Calculate</Button>
