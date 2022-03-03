@@ -1,8 +1,8 @@
 import React, { ReactElement, useCallback, useMemo, useState } from "react";
-import { Modal, ModalProps, Text, View } from "react-native";
+import { Modal, ModalProps, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { THEME } from "../theme";
 import { ListRadio } from "./ListRadio";
-import { IOption, styles } from "./ListComboBox";
 
 interface ISelectionModalProps<OptionT> {
   options: ReadonlyArray<OptionT>;
@@ -92,3 +92,24 @@ const SelectionModalItem: <ItemT>(
     />
   );
 };
+
+const styles = StyleSheet.create({
+  modal: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  dialog: {
+    alignItems: "stretch",
+    backgroundColor: THEME.COLORS.BACKGROUND_ALT,
+    borderRadius: 12,
+    marginHorizontal: 32,
+    marginVertical: "auto",
+    padding: 16,
+  },
+  title: {
+    color: THEME.COLORS.FOREGROUND,
+    fontFamily: THEME.FONTS.MEDIUM,
+    textAlign: "center",
+    ...THEME.FONT_SIZES.TITLE,
+  },
+});

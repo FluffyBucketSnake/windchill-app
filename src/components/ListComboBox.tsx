@@ -17,8 +17,6 @@ export interface IComboBoxProps {
   value?: number;
 }
 
-const snapPoints = [360];
-
 export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
   modalTitle,
   options,
@@ -85,23 +83,5 @@ export const styles = StyleSheet.create({
     color: THEME.COLORS.FOREGROUND,
     marginRight: 4,
     ...THEME.FONT_SIZES.SUBHEADING,
-  },
-  modal: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  dialog: {
-    alignItems: "stretch",
-    backgroundColor: THEME.COLORS.BACKGROUND_ALT,
-    borderRadius: 12,
-    marginHorizontal: 32,
-    marginVertical: "auto",
-    padding: 16,
-  },
-  title: {
-    color: THEME.COLORS.FOREGROUND,
-    fontFamily: THEME.FONTS.MEDIUM,
-    textAlign: "center",
-    ...THEME.FONT_SIZES.TITLE,
   },
 });
