@@ -16,14 +16,14 @@ export enum ButtonVariant {
 
 export interface IButtonProps {
   children?: string;
-  onClick?: (event: GestureResponderEvent) => void;
+  onPress?: (event: GestureResponderEvent) => void;
   style?: ViewStyle;
   variant?: ButtonVariant;
 }
 
 export const Button: React.FC<IButtonProps> = ({
   children,
-  onClick,
+  onPress: onClick,
   style,
   variant = ButtonVariant.Primary,
 }) => {

@@ -2,21 +2,17 @@ import React, { useCallback, useRef } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View, Image } from "react-native";
 import { THEME } from "../theme";
-import { Button, ButtonVariant } from "../components/Button";
+import { Button } from "../components/Button";
 import { IconButton } from "../components/IconButton";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { ListTextBox } from "../components/ListTextBox";
-import { ListComboBox } from "../components/ListComboBox";
 import { BlurView } from "expo-blur";
-
-const optionsSnapPoints = [224];
+import { IOptionsSheetMethods, OptionsSheet } from "./OptionsSheet";
 
 export const MainScreen: React.FC = () => {
-  const optionsModal = useRef<BottomSheet>(null);
-  const openOptions = useCallback(
-    () => optionsModal.current?.snapToIndex(0),
-    []
-  );
+  const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
+
+  const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
+
   return (
     <SafeAreaView style={styles.body}>
       <StatusBar style="auto" />
@@ -50,44 +46,7 @@ export const MainScreen: React.FC = () => {
           <Button style={styles.btnCalculate}>Calculate</Button>
           <IconButton icon="options_filled" onPress={openOptions} />
         </View>
-        <BottomSheet
-          backgroundStyle={styles.optionsBackground}
-          enablePanDownToClose={true}
-          handleIndicatorStyle={styles.optionsHandleIndicator}
-          index={-1}
-          ref={optionsModal}
-          snapPoints={optionsSnapPoints}
-        >
-          <BottomSheetView style={styles.optionsView}>
-            <View style={styles.optionsList}>
-              <Text style={styles.title}>Units</Text>
-              <ListComboBox
-                icon="temperature_regular"
-                labelText="Temperature"
-                modalTitle="Select the desired unit"
-                options={[
-                  { id: 0, name: "Celsius(ºC)" },
-                  { id: 1, name: "Fahrenheit(ºF)" },
-                ]}
-                value={0}
-              />
-              <ListComboBox
-                icon="top_speed_regular"
-                labelText="Speed"
-                modalTitle="Select the desired unit"
-                options={[
-                  { id: 0, name: "Metric(km/h)" },
-                  { id: 1, name: "Imperial(mph)" },
-                ]}
-                value={0}
-              />
-            </View>
-            <View style={styles.optionsFooter}>
-              <Button style={styles.optionsSave}>Save</Button>
-              <Button variant={ButtonVariant.Secondary}>Reset</Button>
-            </View>
-          </BottomSheetView>
-        </BottomSheet>
+        <OptionsSheet ref={refOptionsSheet} />
       </BlurView>
     </SafeAreaView>
   );
@@ -135,37 +94,6 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   btnCalculate: {
-    flex: 1,
-    marginRight: 8,
-  },
-  optionsBackground: {
-    backgroundColor: THEME.COLORS.BACKGROUND_ALT,
-  },
-  optionsHandleIndicator: {
-    backgroundColor: THEME.COLORS.FOREGROUND_ALT,
-  },
-  optionsView: {
-    display: "flex",
-    flexDirection: "column",
-    padding: 16,
-  },
-  title: {
-    color: THEME.COLORS.FOREGROUND,
-    fontFamily: THEME.FONTS.REGULAR,
-    textAlign: "center",
-    ...THEME.FONT_SIZES.TITLE,
-  },
-  optionsFooter: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-  },
-  optionsList: {
-    display: "flex",
-    flexDirection: "column",
-    marginBottom: 16,
-  },
-  optionsSave: {
     flex: 1,
     marginRight: 8,
   },
