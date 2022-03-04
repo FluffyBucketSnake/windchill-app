@@ -13,18 +13,16 @@ import { ListRadio } from "./ListRadio";
 
 interface ISelectionModalProps<OptionT> {
   options: ReadonlyArray<OptionT>;
-  keyExtractor?: (options: OptionT) => number;
+  keyExtractor: (options: OptionT) => string;
   nameExtrator: (option: OptionT) => string;
   onChange?: (option: OptionT) => void;
   title?: string;
-  value?: number;
+  value?: string;
 }
 
-type SelectionModalProps<ItemT> = ISelectionModalProps<ItemT> & ModalProps;
+type SelectionModalProps<OptionT> = ISelectionModalProps<OptionT> & ModalProps;
 
-export const SelectionModal: <ItemT>(
-  props: SelectionModalProps<ItemT>
-) => ReactElement = ({
+export function SelectionModal<OptionT>({
   options,
   keyExtractor,
   nameExtrator,
@@ -33,23 +31,21 @@ export const SelectionModal: <ItemT>(
   value,
   onRequestClose,
   ...props
-}) => {
-  type ItemT = typeof options extends ReadonlyArray<infer U> ? U : never;
-
-  const [innerValue, setInnerValue] = useState<number | undefined>(value);
+}: SelectionModalProps<OptionT>) {
+  const [innerValue, setInnerValue] = useState<OptionT | undefined>(
+    options.find((option) => keyExtractor(option) === value)
+  );
 
   const keyExtractorCallback =
     keyExtractor &&
     useCallback((item) => keyExtractor(item).toString(), [keyExtractor]);
-  const onSelection =
-    keyExtractor &&
-    useCallback(
-      (item: ItemT) => {
-        setInnerValue(keyExtractor(item));
-        onChange?.(item);
-      },
-      [onChange]
-    );
+  const onSelection = useCallback(
+    (option: OptionT) => {
+      setInnerValue(option);
+      onChange?.(option);
+    },
+    [onChange]
+  );
 
   return (
     <Modal transparent={true} {...props}>
@@ -65,8 +61,8 @@ export const SelectionModal: <ItemT>(
                 nameExtrator={nameExtrator}
                 option={item}
                 selected={
-                  keyExtractor !== undefined
-                    ? keyExtractor(item) === innerValue
+                  innerValue
+                    ? keyExtractor(item) === keyExtractor(innerValue)
                     : false
                 }
                 onSelection={onSelection}
@@ -77,7 +73,7 @@ export const SelectionModal: <ItemT>(
       </View>
     </Modal>
   );
-};
+}
 
 type SelectionModalItemProps<ItemT> = {
   option: ItemT;

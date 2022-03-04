@@ -6,30 +6,33 @@ import { IListItemProps, ListItem } from "./ListItem";
 import { THEME } from "../theme";
 import { SelectionModal } from "./SelectionModal";
 
-export interface IOption {
-  id: number;
-  name: string;
-}
-
-export interface IComboBoxProps {
+export interface IComboBoxProps<OptionT> {
   modalTitle?: string;
-  options: IOption[];
-  value?: number;
+  options: OptionT[];
+  keyExtractor: (option: OptionT) => string;
+  nameExtractor: (option: OptionT) => string;
+  value?: string;
 }
 
-export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
+export type ComboBoxProps<OptionT> = IComboBoxProps<OptionT> & IListItemProps;
+
+export function ListComboBox<OptionT>({
   modalTitle,
   options,
+  keyExtractor,
+  nameExtractor,
   value,
   ...props
-}) => {
+}: ComboBoxProps<OptionT>) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [innerValue, setInnerValue] = useState<number | undefined>(value);
+  const [innerValue, setInnerValue] = useState<OptionT | undefined>(
+    options.find((option) => keyExtractor(option) == value)
+  );
 
   const openModal = useCallback(() => setModalVisible(true), []);
   const dismissModal = useCallback(() => setModalVisible(false), []);
-  const onChangeCallback = useCallback((option: IOption) => {
-    setInnerValue(option.id);
+  const onChangeCallback = useCallback((option: OptionT) => {
+    setInnerValue(option);
     dismissModal();
   }, []);
 
@@ -43,15 +46,15 @@ export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
             onPress={openModal}
           >
             <Text style={styles.text}>
-              {innerValue !== undefined ? options[innerValue].name : undefined}
+              {innerValue !== undefined ? nameExtractor(innerValue) : undefined}
             </Text>
             <FluentUIIcon name="chevron_down_regular" size={16} color="white" />
           </TouchableOpacity>
         </View>
       </ListItem>
       <SelectionModal
-        keyExtractor={({ id }) => id}
-        nameExtrator={({ name }) => name}
+        keyExtractor={keyExtractor}
+        nameExtrator={nameExtractor}
         onChange={onChangeCallback}
         onRequestClose={dismissModal}
         options={options}
@@ -61,7 +64,7 @@ export const ListComboBox: React.FC<IComboBoxProps & IListItemProps> = ({
       />
     </>
   );
-};
+}
 
 export const styles = StyleSheet.create({
   view: {
