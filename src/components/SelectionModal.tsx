@@ -1,5 +1,12 @@
 import React, { ReactElement, useCallback, useMemo, useState } from "react";
-import { Modal, ModalProps, StyleSheet, Text, View } from "react-native";
+import {
+  Modal,
+  ModalProps,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { THEME } from "../theme";
 import { ListRadio } from "./ListRadio";
@@ -24,6 +31,7 @@ export const SelectionModal: <ItemT>(
   onChange,
   title,
   value,
+  onRequestClose,
   ...props
 }) => {
   type ItemT = typeof options extends ReadonlyArray<infer U> ? U : never;
@@ -46,6 +54,7 @@ export const SelectionModal: <ItemT>(
   return (
     <Modal transparent={true} {...props}>
       <View style={styles.modal}>
+        <Pressable style={styles.backdrop} onPress={onRequestClose} />
         <View style={styles.dialog}>
           {title && <Text style={styles.title}>{title}</Text>}
           <FlatList
@@ -97,6 +106,13 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     justifyContent: "center",
+  },
+  backdrop: {
+    position: "absolute",
+    backgroundColor: THEME.COLORS.BACKGROUND,
+    opacity: 0.75,
+    width: "100%",
+    height: "100%",
   },
   dialog: {
     alignItems: "stretch",
