@@ -7,10 +7,11 @@ import { IconButton } from "../components/IconButton";
 import { ListTextBox } from "../components/ListTextBox";
 import { BlurView } from "expo-blur";
 import { IOptionsSheetMethods, OptionsSheet } from "./OptionsSheet";
-import { Options } from "../models/Options";
+import { DefaultOptions, Options } from "../models/Options";
+import { ListItem } from "../components/ListItem";
 
 export const MainScreen: React.FC = () => {
-  const [options, setOptions] = useState<Options | undefined>();
+  const [options, setOptions] = useState<Options>(DefaultOptions);
 
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
 
@@ -31,7 +32,7 @@ export const MainScreen: React.FC = () => {
             temperature and the wind speed
           </Text>
         </View>
-        <View>
+        <View style={styles.form}>
           <ListTextBox
             icon="temperature_regular"
             labelText="Actual temperature"
@@ -46,8 +47,25 @@ export const MainScreen: React.FC = () => {
           />
         </View>
         <View style={styles.footer}>
-          <Button style={styles.btnCalculate}>Calculate</Button>
-          <IconButton icon="options_filled" onPress={openOptions} />
+          <ListItem
+            hasSeparator={false}
+            labelText="Wind chill factor"
+            labelStyle={styles.listLabelSmall}
+            style={styles.listItemSmall}
+          >
+            <Text style={styles.listTextSmall}>35.0</Text>
+          </ListItem>
+          <View style={styles.buttons}>
+            <Button style={styles.btnCalculate}>Calculate</Button>
+            <IconButton icon="options_filled" onPress={openOptions} />
+          </View>
+          <ListItem
+            icon="temperature_regular"
+            hasSeparator={false}
+            labelText="Perceived temperature"
+          >
+            <Text style={styles.listTextPrimary}>35.0</Text>
+          </ListItem>
         </View>
         <OptionsSheet
           ref={refOptionsSheet}
@@ -70,7 +88,7 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   content: {
-    alignItems: "center",
+    alignItems: "stretch",
     display: "flex",
     height: "100%",
     justifyContent: "space-between",
@@ -95,13 +113,41 @@ const styles = StyleSheet.create({
     textAlign: "center",
     ...THEME.FONT_SIZES.BODY,
   },
+  form: {
+    display: "flex",
+  },
   footer: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     marginHorizontal: "auto",
+  },
+  listItemSmall: {
+    height: 32,
+    marginBottom: 16,
+  },
+  listTextSmall: {
+    color: THEME.COLORS.FOREGROUND,
+    fontFamily: THEME.FONTS.REGULAR,
+    textAlign: "right",
+    ...THEME.FONT_SIZES.BODY,
+  },
+  listLabelSmall: {
+    fontFamily: THEME.FONTS.REGULAR,
+    ...THEME.FONT_SIZES.BODY,
+  },
+  buttons: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: 16,
   },
   btnCalculate: {
     flex: 1,
     marginRight: 8,
+  },
+  listTextPrimary: {
+    color: THEME.COLORS.PRIMARY,
+    fontFamily: THEME.FONTS.REGULAR,
+    textAlign: "right",
+    ...THEME.FONT_SIZES.HEADING,
   },
 });
