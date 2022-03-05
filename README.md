@@ -8,17 +8,17 @@ This app is based on an [app idea of similar name.](https://github.com/florinpop
 
 ### Main
 
-- [ ] User can select the measurement system calculations will be performed in - Metric or English
+- [x] User can select the measurement system calculations will be performed in - Metric or English
 
-- [ ] User can enter the actual temperature and the wind speed
+- [x] User can enter the actual temperature and the wind speed
 
-- [ ] User can press the `Calculate` button to display the wind chill
+- [x] User can press the `Calculate` button to display the wind chill
 
 - [ ] User will receive an error message when `Calculate` is clicked if data values are not entered
 
 ### Bonus
 
-- [ ] User will receive an error message when `Calculate` is clicked if the resulting wind chill factor is greater than or equal to the actual temperature. Since this signifies an internal error in the calculation you may also satisfy this requirement using an assertion
+- [x] ~~User will receive an error message when `Calculate` is clicked if the resulting wind chill factor is greater than or equal to the actual temperature. Since this signifies an internal error in the calculation you may also satisfy this requirement using an assertion~~ It's impossible to happen due to the equation.
 
 - [ ] User will be prompted to enter new data values if `Calculate` is pressed without first changing at least one of the input fields
 
