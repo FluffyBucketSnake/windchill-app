@@ -1,10 +1,18 @@
 import React from "react";
-import { StyleSheet, Text, TextStyle, View, ViewProps } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+  ViewProps,
+  ViewStyle,
+} from "react-native";
 import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
 import { THEME } from "../theme";
 
 export interface IBaseListItemProps {
   iconComponent?: React.ReactNode;
+  hasSeparator?: boolean;
   labelText: string;
   labelStyle?: TextStyle;
 }
@@ -14,6 +22,7 @@ export type BaseListItemProps = IBaseListItemProps & ViewProps;
 export const BaseListItem: React.FC<BaseListItemProps> = ({
   children,
   iconComponent,
+  hasSeparator = true,
   labelText,
   labelStyle,
   style,
@@ -24,7 +33,7 @@ export const BaseListItem: React.FC<BaseListItemProps> = ({
       {iconComponent && (
         <View style={styles.iconContainer}>{iconComponent}</View>
       )}
-      <View style={styles.content}>
+      <View style={[styles.content, hasSeparator && separatorStyle]}>
         <Text style={[styles.label, labelStyle]}>{labelText}</Text>
         <View style={styles.childrenContainer}>{children}</View>
       </View>
@@ -34,13 +43,15 @@ export const BaseListItem: React.FC<BaseListItemProps> = ({
 
 const styles = StyleSheet.create({
   view: {
-    alignItems: "center",
+    alignItems: "stretch",
     display: "flex",
     flexDirection: "row",
     height: 48,
-    width: "100%",
   },
   iconContainer: {
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
     marginHorizontal: 16,
   },
   childrenContainer: {
@@ -48,12 +59,9 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderColor: THEME.COLORS.FOREGROUND_ALT,
     flex: 1,
     display: "flex",
     flexDirection: "row",
-    height: 48,
     marginHorizontal: 16,
   },
   label: {
@@ -61,3 +69,8 @@ const styles = StyleSheet.create({
     ...THEME.FONT_SIZES.SUBHEADING,
   },
 });
+
+const separatorStyle: ViewStyle = {
+  borderBottomWidth: 1,
+  borderColor: THEME.COLORS.FOREGROUND_ALT,
+};
