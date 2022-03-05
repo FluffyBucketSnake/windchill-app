@@ -13,7 +13,8 @@ import { speedUnits, temperatureUnits, Unit } from "../models/Unit";
 import { DefaultOptions, Options } from "../models/Options";
 
 export interface IOptionsSheetProps {
-  value?: Options;
+  onSave?: (options: Options) => void;
+  options?: Options;
 }
 
 export interface IOptionsSheetMethods {
@@ -24,26 +25,44 @@ export interface IOptionsSheetMethods {
 export const OptionsSheet = React.forwardRef<
   IOptionsSheetMethods,
   IOptionsSheetProps
->(({ value }, ref) => {
-  const [currentValue, setCurrentValue] = useState<Options>(
-    value ?? DefaultOptions
+>(({ onSave, options }, ref) => {
+  const [currentOptions, setCurrentOptions] = useState<Options>(
+    options ?? DefaultOptions
   );
 
   const refBottomSheet = useRef<BottomSheet>(null);
 
   const changeSpeedUnit = useCallback(
-    (unit: Unit) => setCurrentValue({ ...currentValue, speedUnit: unit }),
-    [currentValue]
+    (unit: Unit) => {
+      setCurrentOptions((old) => ({
+        ...old,
+        speedUnit: unit,
+      }));
+    },
+    [currentOptions]
   );
   const changeTemperatureUnit = useCallback(
-    (unit: Unit) => setCurrentValue({ ...currentValue, temperatureUnit: unit }),
-    [currentValue]
+    (unit: Unit) => {
+      setCurrentOptions((old) => ({
+        ...old,
+        temperatureUnit: unit,
+      }));
+    },
+    [currentOptions]
   );
   const closeSheet = useCallback(
     () => refBottomSheet.current?.close(),
     [refBottomSheet]
   );
-  const resetOptions = useCallback(() => setCurrentValue(DefaultOptions), []);
+  const discardChanges = useCallback(
+    () => setCurrentOptions(options ?? DefaultOptions),
+    [options]
+  );
+  const resetOptions = useCallback(() => setCurrentOptions(DefaultOptions), []);
+  const saveOptions = useCallback(() => {
+    onSave?.(currentOptions);
+    closeSheet();
+  }, [currentOptions]);
   const unitKeyExtractor = useCallback(({ id }: Unit) => id, []);
   const unitNameExtractor = useCallback(
     ({ friendlyName, suffix }: Unit) => `${friendlyName}(${suffix})`,
@@ -61,6 +80,7 @@ export const OptionsSheet = React.forwardRef<
       enablePanDownToClose={true}
       handleIndicatorStyle={styles.handleIndicator}
       index={-1}
+      onClose={discardChanges}
       ref={refBottomSheet}
       snapPoints={[224]}
     >
@@ -75,7 +95,7 @@ export const OptionsSheet = React.forwardRef<
             nameExtractor={unitNameExtractor}
             onChange={changeTemperatureUnit}
             options={temperatureUnits}
-            value={currentValue.temperatureUnit.id}
+            value={currentOptions.temperatureUnit.id}
           />
           <ListComboBox
             icon="top_speed_regular"
@@ -85,11 +105,11 @@ export const OptionsSheet = React.forwardRef<
             nameExtractor={unitNameExtractor}
             onChange={changeSpeedUnit}
             options={speedUnits}
-            value={currentValue.speedUnit.id}
+            value={currentOptions.speedUnit.id}
           />
         </View>
         <View style={styles.footer}>
-          <Button style={styles.save} onPress={closeSheet}>
+          <Button style={styles.save} onPress={saveOptions}>
             Save
           </Button>
           <Button variant={ButtonVariant.Secondary} onPress={resetOptions}>

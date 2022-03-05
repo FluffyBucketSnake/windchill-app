@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View, Image } from "react-native";
 import { THEME } from "../theme";
@@ -7,8 +7,11 @@ import { IconButton } from "../components/IconButton";
 import { ListTextBox } from "../components/ListTextBox";
 import { BlurView } from "expo-blur";
 import { IOptionsSheetMethods, OptionsSheet } from "./OptionsSheet";
+import { Options } from "../models/Options";
 
 export const MainScreen: React.FC = () => {
+  const [options, setOptions] = useState<Options | undefined>();
+
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
 
   const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
@@ -33,20 +36,24 @@ export const MainScreen: React.FC = () => {
             icon="temperature_regular"
             labelText="Actual temperature"
             keyboardType="numeric"
-            suffix="ºC"
+            suffix={options?.temperatureUnit.suffix}
           />
           <ListTextBox
             icon="weather_squalls_regular"
             labelText="Wind speed"
             keyboardType="numeric"
-            suffix="km/h"
+            suffix={options?.speedUnit.suffix}
           />
         </View>
         <View style={styles.footer}>
           <Button style={styles.btnCalculate}>Calculate</Button>
           <IconButton icon="options_filled" onPress={openOptions} />
         </View>
-        <OptionsSheet ref={refOptionsSheet} />
+        <OptionsSheet
+          ref={refOptionsSheet}
+          options={options}
+          onSave={setOptions}
+        />
       </BlurView>
     </SafeAreaView>
   );
