@@ -1,24 +1,59 @@
-import React, { useCallback, useImperativeHandle, useRef } from "react";
+import React, {
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button, ButtonVariant } from "../components/Button";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { ListComboBox } from "../components/ListComboBox";
 import { THEME } from "../theme";
+import { speedUnits, temperatureUnits, Unit } from "../models/Unit";
+import { DefaultOptions, Options } from "../models/Options";
+
+export interface IOptionsSheetProps {
+  value?: Options;
+}
 
 export interface IOptionsSheetMethods {
   present(): void;
   close(): void;
 }
 
-export const OptionsSheet = React.forwardRef<IOptionsSheetMethods>((_, ref) => {
+export const OptionsSheet = React.forwardRef<
+  IOptionsSheetMethods,
+  IOptionsSheetProps
+>(({ value }, ref) => {
+  const [currentValue, setCurrentValue] = useState<Options>(
+    value ?? DefaultOptions
+  );
+
   const refBottomSheet = useRef<BottomSheet>(null);
+
+  const changeSpeedUnit = useCallback(
+    (unit: Unit) => setCurrentValue({ ...currentValue, speedUnit: unit }),
+    [currentValue]
+  );
+  const changeTemperatureUnit = useCallback(
+    (unit: Unit) => setCurrentValue({ ...currentValue, temperatureUnit: unit }),
+    [currentValue]
+  );
+  const closeSheet = useCallback(
+    () => refBottomSheet.current?.close(),
+    [refBottomSheet]
+  );
+  const resetOptions = useCallback(() => setCurrentValue(DefaultOptions), []);
+  const unitKeyExtractor = useCallback(({ id }: Unit) => id, []);
+  const unitNameExtractor = useCallback(
+    ({ friendlyName, suffix }: Unit) => `${friendlyName}(${suffix})`,
+    []
+  );
 
   useImperativeHandle(ref, () => ({
     present: () => refBottomSheet.current?.expand(),
-    close: () => refBottomSheet.current?.close(),
+    close: () => closeSheet(),
   }));
-
-  const closeSheet = useCallback(() => refBottomSheet.current?.close(), []);
 
   return (
     <BottomSheet
@@ -35,29 +70,31 @@ export const OptionsSheet = React.forwardRef<IOptionsSheetMethods>((_, ref) => {
           <ListComboBox
             icon="temperature_regular"
             labelText="Temperature"
+            keyExtractor={unitKeyExtractor}
             modalTitle="Select the desired unit"
-            options={[
-              { id: 0, name: "Celsius(ºC)" },
-              { id: 1, name: "Fahrenheit(ºF)" },
-            ]}
-            value={0}
+            nameExtractor={unitNameExtractor}
+            onChange={changeTemperatureUnit}
+            options={temperatureUnits}
+            value={currentValue.temperatureUnit.id}
           />
           <ListComboBox
             icon="top_speed_regular"
             labelText="Speed"
+            keyExtractor={unitKeyExtractor}
             modalTitle="Select the desired unit"
-            options={[
-              { id: 0, name: "Metric(km/h)" },
-              { id: 1, name: "Imperial(mph)" },
-            ]}
-            value={0}
+            nameExtractor={unitNameExtractor}
+            onChange={changeSpeedUnit}
+            options={speedUnits}
+            value={currentValue.speedUnit.id}
           />
         </View>
         <View style={styles.footer}>
           <Button style={styles.save} onPress={closeSheet}>
             Save
           </Button>
-          <Button variant={ButtonVariant.Secondary}>Reset</Button>
+          <Button variant={ButtonVariant.Secondary} onPress={resetOptions}>
+            Reset
+          </Button>
         </View>
       </BottomSheetView>
     </BottomSheet>
