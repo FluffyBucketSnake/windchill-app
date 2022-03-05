@@ -7,7 +7,6 @@ import {
   ViewProps,
   ViewStyle,
 } from "react-native";
-import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
 import { THEME } from "../theme";
 
 export interface IBaseListItemProps {
