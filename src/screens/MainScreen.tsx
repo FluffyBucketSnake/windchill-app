@@ -9,6 +9,7 @@ import { BlurView } from "expo-blur";
 import { IOptionsSheetMethods, OptionsSheet } from "./OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
 import { ListItem } from "../components/ListItem";
+import { calculateWindChill } from "../services/calculateWindChill";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
@@ -36,15 +37,18 @@ export const MainScreen: React.FC = () => {
     if (actualTemperature === null || windSpeed === null) {
       return;
     }
-    const Ta = actualTemperature;
-    const v = windSpeed;
-    const vP6 = Math.pow(v, 0.16);
-    const Te = 13.12 + 0.6215 * Ta - 11.37 * vP6 + 0.3965 * Ta * vP6;
-    setPerceivedTemperature(Te);
-    setWindChillFactor(Te / Ta);
+    const [Tp, Kwc] = calculateWindChill(
+      actualTemperature,
+      windSpeed,
+      options.temperatureUnit,
+      options.speedUnit
+    );
+    setPerceivedTemperature(Tp);
+    setWindChillFactor(Kwc);
   }, [
     actualTemperature,
     windSpeed,
+    options,
     setPerceivedTemperature,
     setWindChillFactor,
   ]);
