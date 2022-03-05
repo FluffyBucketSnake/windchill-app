@@ -8,16 +8,14 @@ import { ListTextBox } from "../components/ListTextBox";
 import { BlurView } from "expo-blur";
 import { IOptionsSheetMethods, OptionsSheet } from "./OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
-import { ListItem } from "../components/ListItem";
 import { calculateWindChill } from "../services/calculateWindChill";
 import { ListText } from "../components/ListText";
+import Toast from "react-native-root-toast";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
-  const [actualTemperature, setActualTemperature] = useState<number | null>(
-    null
-  );
-  const [windSpeed, setWindSpeed] = useState<number | null>(null);
+  const [actualTemperature, setActualTemperature] = useState<string>("");
+  const [windSpeed, setWindSpeed] = useState<string>("");
   const [perceivedTemperature, setPerceivedTemperature] = useState<
     number | null
   >(null);
@@ -25,22 +23,12 @@ export const MainScreen: React.FC = () => {
 
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
 
-  const changeActualTemperature = useCallback(
-    (text: string) => setActualTemperature(parseFloat(text)),
-    [setActualTemperature]
-  );
-  const changeWindSpeed = useCallback(
-    (text: string) => setWindSpeed(parseFloat(text)),
-    [setWindSpeed]
-  );
-  const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
   const calculateResults = useCallback(() => {
-    if (actualTemperature === null || windSpeed === null) {
-      return;
-    }
+    const Ta = parseNumber(actualTemperature, "actual temperature");
+    const v = parseNonNegative(windSpeed, "wind speed");
     const [Tp, Kwc] = calculateWindChill(
-      actualTemperature,
-      windSpeed,
+      Ta,
+      v,
       options.temperatureUnit,
       options.speedUnit
     );
@@ -53,6 +41,27 @@ export const MainScreen: React.FC = () => {
     setPerceivedTemperature,
     setWindChillFactor,
   ]);
+  const changeActualTemperature = useCallback(
+    (text: string) => setActualTemperature(text),
+    [setActualTemperature]
+  );
+  const changeWindSpeed = useCallback(
+    (text: string) => setWindSpeed(text),
+    [setWindSpeed]
+  );
+  const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
+  const tryCalculate = useCallback(() => {
+    try {
+      calculateResults();
+    } catch (err) {
+      const message = (err as Error).message;
+      Toast.show(message, {
+        duration: 5000,
+        backgroundColor: THEME.COLORS.DANGER,
+        textColor: THEME.COLORS.PRIMARY_FOREGROUND,
+      });
+    }
+  }, [calculateResults]);
 
   useEffect(() => {
     setPerceivedTemperature(null);
@@ -101,7 +110,7 @@ export const MainScreen: React.FC = () => {
             </ListText>
           )}
           <View style={styles.buttons}>
-            <Button onPress={calculateResults} style={styles.btnCalculate}>
+            <Button onPress={tryCalculate} style={styles.btnCalculate}>
               Calculate
             </Button>
             <IconButton icon="options_filled" onPress={openOptions} />
@@ -128,6 +137,27 @@ export const MainScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+function parseNumber(text: string, context: string): number {
+  if (!text) {
+    throw new Error(`Input a different ${context} value.`);
+  }
+  if (!text.match(/^\-?\d+(.\d+)?$/)) {
+    throw new Error(`${capitalizeFirst(context)} is not a valid number.`);
+  }
+  return parseFloat(text);
+}
+
+function parseNonNegative(text: string, context: string): number {
+  const result = parseNumber(text, context);
+  if (result < 0) {
+    throw new Error(`${capitalizeFirst(context)} cannot be negative.`);
+  }
+  return result;
+}
+
+const capitalizeFirst: (text: string) => string = (text) =>
+  `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 
 const styles = StyleSheet.create({
   body: {
