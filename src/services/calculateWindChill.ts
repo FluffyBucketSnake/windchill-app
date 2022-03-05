@@ -5,7 +5,7 @@ export function calculateWindChill(
   windSpeed: number,
   temperatureUnit: Unit,
   speedUnit: Unit
-): [number, number] {
+): number {
   const Ta = convertUnit(actualTemperature, temperatureUnit.id, "celsius");
   const v = convertUnit(windSpeed, speedUnit.id, "kph");
   const vP6 = Math.pow(v, 0.16);
@@ -15,5 +15,5 @@ export function calculateWindChill(
       "The resulting perceived temperature is higher than the actual temperature."
     );
   }
-  return [Tp, Tp / Ta];
+  return Tp;
 }

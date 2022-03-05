@@ -19,28 +19,20 @@ export const MainScreen: React.FC = () => {
   const [perceivedTemperature, setPerceivedTemperature] = useState<
     number | null
   >(null);
-  const [windChillFactor, setWindChillFactor] = useState<number | null>(null);
 
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
 
   const calculateResults = useCallback(() => {
     const Ta = parseNumber(actualTemperature, "actual temperature");
     const v = parseNonNegative(windSpeed, "wind speed");
-    const [Tp, Kwc] = calculateWindChill(
+    const Tp = calculateWindChill(
       Ta,
       v,
       options.temperatureUnit,
       options.speedUnit
     );
     setPerceivedTemperature(Tp);
-    setWindChillFactor(Kwc);
-  }, [
-    actualTemperature,
-    windSpeed,
-    options,
-    setPerceivedTemperature,
-    setWindChillFactor,
-  ]);
+  }, [actualTemperature, windSpeed, options, setPerceivedTemperature]);
   const changeActualTemperature = useCallback(
     (text: string) => setActualTemperature(text),
     [setActualTemperature]
@@ -65,7 +57,6 @@ export const MainScreen: React.FC = () => {
 
   useEffect(() => {
     setPerceivedTemperature(null);
-    setWindChillFactor(null);
   }, [options]);
 
   return (
@@ -100,21 +91,6 @@ export const MainScreen: React.FC = () => {
           />
         </View>
         <View style={styles.footer}>
-          {windChillFactor !== null && (
-            <ListText
-              hasSeparator={false}
-              label="Wind chill factor"
-              variant="small"
-            >
-              {windChillFactor.toFixed(2)}
-            </ListText>
-          )}
-          <View style={styles.buttons}>
-            <Button onPress={tryCalculate} style={styles.btnCalculate}>
-              Calculate
-            </Button>
-            <IconButton icon="options_filled" onPress={openOptions} />
-          </View>
           {perceivedTemperature !== null && (
             <ListText
               icon="temperature_regular"
@@ -127,6 +103,12 @@ export const MainScreen: React.FC = () => {
               }`}
             </ListText>
           )}
+          <View style={styles.buttons}>
+            <Button onPress={tryCalculate} style={styles.btnCalculate}>
+              Calculate
+            </Button>
+            <IconButton icon="options_filled" onPress={openOptions} />
+          </View>
         </View>
         <OptionsSheet
           ref={refOptionsSheet}
@@ -206,7 +188,7 @@ const styles = StyleSheet.create({
   buttons: {
     display: "flex",
     flexDirection: "row",
-    marginBottom: 16,
+    marginTop: 16,
   },
   btnCalculate: {
     flex: 1,
