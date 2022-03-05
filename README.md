@@ -14,11 +14,11 @@ This app is based on an [app idea of similar name.](https://github.com/florinpop
 
 - [x] User can press the `Calculate` button to display the wind chill
 
-- [ ] User will receive an error message when `Calculate` is clicked if data values are not entered
+- [x] User will receive an error message when `Calculate` is clicked if data values are not entered
 
 ### Bonus
 
-- [x] ~~User will receive an error message when `Calculate` is clicked if the resulting wind chill factor is greater than or equal to the actual temperature. Since this signifies an internal error in the calculation you may also satisfy this requirement using an assertion~~ It's impossible to happen due to the equation.
+- [x] User will receive an error message when `Calculate` is clicked if the resulting wind chill factor is greater than or equal to the actual temperature. Since this signifies an internal error in the calculation you may also satisfy this requirement using an assertion ~~It's impossible to happen due to the equation.~~ Ignore that, it depends on the value of the wind speed.
 
 - [ ] User will be prompted to enter new data values if `Calculate` is pressed without first changing at least one of the input fields
 
