@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useMemo, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import {
   Modal,
   ModalProps,
@@ -32,8 +32,13 @@ export function SelectionModal<OptionT>({
   onRequestClose,
   ...props
 }: SelectionModalProps<OptionT>) {
+  const findValueOption = useCallback(
+    () => options.find((option) => keyExtractor(option) == value),
+    [value]
+  );
+
   const [innerValue, setInnerValue] = useState<OptionT | undefined>(
-    options.find((option) => keyExtractor(option) === value)
+    findValueOption()
   );
 
   const keyExtractorCallback =
@@ -46,6 +51,8 @@ export function SelectionModal<OptionT>({
     },
     [onChange]
   );
+
+  useEffect(() => setInnerValue(findValueOption()), [value]);
 
   return (
     <Modal transparent={true} {...props}>

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FluentUIIcon } from "./FluentUIIcon";
@@ -11,6 +11,7 @@ export interface IComboBoxProps<OptionT> {
   options: OptionT[];
   keyExtractor: (option: OptionT) => string;
   nameExtractor: (option: OptionT) => string;
+  onChange?: (option: OptionT) => void;
   value?: string;
 }
 
@@ -21,20 +22,29 @@ export function ListComboBox<OptionT>({
   options,
   keyExtractor,
   nameExtractor,
+  onChange,
   value,
   ...props
 }: ComboBoxProps<OptionT>) {
+  const findValueOption = useCallback(
+    () => options.find((option) => keyExtractor(option) == value),
+    [value]
+  );
+
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [innerValue, setInnerValue] = useState<OptionT | undefined>(
-    options.find((option) => keyExtractor(option) == value)
+    findValueOption()
   );
 
   const openModal = useCallback(() => setModalVisible(true), []);
   const dismissModal = useCallback(() => setModalVisible(false), []);
   const onChangeCallback = useCallback((option: OptionT) => {
     setInnerValue(option);
+    onChange?.(option);
     dismissModal();
   }, []);
+
+  useEffect(() => setInnerValue(findValueOption()), [value]);
 
   return (
     <>
