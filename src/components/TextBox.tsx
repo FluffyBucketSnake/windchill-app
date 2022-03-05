@@ -11,12 +11,14 @@ import { THEME } from "../theme";
 
 export interface ITextBoxProps {
   keyboardType?: KeyboardTypeOptions;
+  onChangeText?: (text: string) => void;
   suffix?: string;
   value?: string;
 }
 
 export const TextBox: React.FC<ITextBoxProps> = ({
   keyboardType,
+  onChangeText,
   suffix,
   value,
 }) => {
@@ -29,6 +31,7 @@ export const TextBox: React.FC<ITextBoxProps> = ({
         style={styles.input}
         value={value}
         keyboardType={keyboardType}
+        onChangeText={onChangeText}
         ref={refTextInput}
       />
       <Text style={styles.suffix}> {suffix}</Text>

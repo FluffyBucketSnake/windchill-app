@@ -3,12 +3,18 @@ import { IListItemProps, ListItem } from "./ListItem";
 import { ITextBoxProps, TextBox } from "./TextBox";
 
 export const ListTextBox: React.FC<IListItemProps & ITextBoxProps> = ({
+  keyboardType,
+  onChangeText,
   suffix,
   value,
-  keyboardType,
   ...props
 }) => (
   <ListItem {...props}>
-    <TextBox suffix={suffix} value={value} keyboardType={keyboardType} />
+    <TextBox
+      keyboardType={keyboardType}
+      onChangeText={onChangeText}
+      suffix={suffix}
+      value={value}
+    />
   </ListItem>
 );
