@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View, Image } from "react-native";
 import { THEME } from "../theme";
@@ -12,10 +12,47 @@ import { ListItem } from "../components/ListItem";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
+  const [actualTemperature, setActualTemperature] = useState<number | null>(
+    null
+  );
+  const [windSpeed, setWindSpeed] = useState<number | null>(null);
+  const [perceivedTemperature, setPerceivedTemperature] = useState<
+    number | null
+  >(null);
+  const [windChillFactor, setWindChillFactor] = useState<number | null>(null);
 
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
 
+  const changeActualTemperature = useCallback(
+    (text: string) => setActualTemperature(parseFloat(text)),
+    [setActualTemperature]
+  );
+  const changeWindSpeed = useCallback(
+    (text: string) => setWindSpeed(parseFloat(text)),
+    [setWindSpeed]
+  );
   const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
+  const calculateResults = useCallback(() => {
+    if (actualTemperature === null || windSpeed === null) {
+      return;
+    }
+    const Ta = actualTemperature;
+    const v = windSpeed;
+    const vP6 = Math.pow(v, 0.16);
+    const Te = 13.12 + 0.6215 * Ta - 11.37 * vP6 + 0.3965 * Ta * vP6;
+    setPerceivedTemperature(Te);
+    setWindChillFactor(Te / Ta);
+  }, [
+    actualTemperature,
+    windSpeed,
+    setPerceivedTemperature,
+    setWindChillFactor,
+  ]);
+
+  useEffect(() => {
+    setPerceivedTemperature(null);
+    setWindChillFactor(null);
+  }, [options]);
 
   return (
     <SafeAreaView style={styles.body}>
@@ -37,35 +74,49 @@ export const MainScreen: React.FC = () => {
             icon="temperature_regular"
             labelText="Actual temperature"
             keyboardType="numeric"
+            onChangeText={changeActualTemperature}
             suffix={options?.temperatureUnit.suffix}
           />
           <ListTextBox
             icon="weather_squalls_regular"
             labelText="Wind speed"
             keyboardType="numeric"
+            onChangeText={changeWindSpeed}
             suffix={options?.speedUnit.suffix}
           />
         </View>
         <View style={styles.footer}>
-          <ListItem
-            hasSeparator={false}
-            labelText="Wind chill factor"
-            labelStyle={styles.listLabelSmall}
-            style={styles.listItemSmall}
-          >
-            <Text style={styles.listTextSmall}>35.0</Text>
-          </ListItem>
+          {windChillFactor !== null && (
+            <ListItem
+              hasSeparator={false}
+              labelText="Wind chill factor"
+              labelStyle={styles.listLabelSmall}
+              style={styles.listItemSmall}
+            >
+              <Text style={styles.listTextSmall}>
+                {windChillFactor.toFixed(2)}
+              </Text>
+            </ListItem>
+          )}
           <View style={styles.buttons}>
-            <Button style={styles.btnCalculate}>Calculate</Button>
+            <Button onPress={calculateResults} style={styles.btnCalculate}>
+              Calculate
+            </Button>
             <IconButton icon="options_filled" onPress={openOptions} />
           </View>
-          <ListItem
-            icon="temperature_regular"
-            hasSeparator={false}
-            labelText="Perceived temperature"
-          >
-            <Text style={styles.listTextPrimary}>35.0</Text>
-          </ListItem>
+          {perceivedTemperature !== null && (
+            <ListItem
+              icon="temperature_regular"
+              hasSeparator={false}
+              labelText="Perceived temperature"
+            >
+              <Text style={styles.listTextPrimary}>
+                {`${perceivedTemperature.toFixed(2)} ${
+                  options.temperatureUnit.suffix
+                }`}
+              </Text>
+            </ListItem>
+          )}
         </View>
         <OptionsSheet
           ref={refOptionsSheet}
