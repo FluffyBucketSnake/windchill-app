@@ -10,6 +10,7 @@ import { IOptionsSheetMethods, OptionsSheet } from "./OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
 import { ListItem } from "../components/ListItem";
 import { calculateWindChill } from "../services/calculateWindChill";
+import { ListText } from "../components/ListText";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
@@ -76,14 +77,14 @@ export const MainScreen: React.FC = () => {
         <View style={styles.form}>
           <ListTextBox
             icon="temperature_regular"
-            labelText="Actual temperature"
+            label="Actual temperature"
             keyboardType="numeric"
             onChangeText={changeActualTemperature}
             suffix={options?.temperatureUnit.suffix}
           />
           <ListTextBox
             icon="weather_squalls_regular"
-            labelText="Wind speed"
+            label="Wind speed"
             keyboardType="numeric"
             onChangeText={changeWindSpeed}
             suffix={options?.speedUnit.suffix}
@@ -91,16 +92,13 @@ export const MainScreen: React.FC = () => {
         </View>
         <View style={styles.footer}>
           {windChillFactor !== null && (
-            <ListItem
+            <ListText
               hasSeparator={false}
-              labelText="Wind chill factor"
-              labelStyle={styles.listLabelSmall}
-              style={styles.listItemSmall}
+              label="Wind chill factor"
+              variant="small"
             >
-              <Text style={styles.listTextSmall}>
-                {windChillFactor.toFixed(2)}
-              </Text>
-            </ListItem>
+              {windChillFactor.toFixed(2)}
+            </ListText>
           )}
           <View style={styles.buttons}>
             <Button onPress={calculateResults} style={styles.btnCalculate}>
@@ -109,17 +107,16 @@ export const MainScreen: React.FC = () => {
             <IconButton icon="options_filled" onPress={openOptions} />
           </View>
           {perceivedTemperature !== null && (
-            <ListItem
+            <ListText
               icon="temperature_regular"
               hasSeparator={false}
-              labelText="Perceived temperature"
+              label="Perceived temperature"
+              variant="primary"
             >
-              <Text style={styles.listTextPrimary}>
-                {`${perceivedTemperature.toFixed(2)} ${
-                  options.temperatureUnit.suffix
-                }`}
-              </Text>
-            </ListItem>
+              {`${perceivedTemperature.toFixed(2)} ${
+                options.temperatureUnit.suffix
+              }`}
+            </ListText>
           )}
         </View>
         <OptionsSheet
@@ -176,20 +173,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     marginHorizontal: "auto",
   },
-  listItemSmall: {
-    height: 32,
-    marginBottom: 16,
-  },
-  listTextSmall: {
-    color: THEME.COLORS.FOREGROUND,
-    fontFamily: THEME.FONTS.REGULAR,
-    textAlign: "right",
-    ...THEME.FONT_SIZES.BODY,
-  },
-  listLabelSmall: {
-    fontFamily: THEME.FONTS.REGULAR,
-    ...THEME.FONT_SIZES.BODY,
-  },
   buttons: {
     display: "flex",
     flexDirection: "row",
@@ -198,11 +181,5 @@ const styles = StyleSheet.create({
   btnCalculate: {
     flex: 1,
     marginRight: 8,
-  },
-  listTextPrimary: {
-    color: THEME.COLORS.PRIMARY,
-    fontFamily: THEME.FONTS.REGULAR,
-    textAlign: "right",
-    ...THEME.FONT_SIZES.HEADING,
   },
 });

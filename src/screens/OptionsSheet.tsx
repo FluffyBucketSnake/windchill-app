@@ -89,7 +89,7 @@ export const OptionsSheet = React.forwardRef<
           <Text style={styles.title}>Units</Text>
           <ListComboBox
             icon="temperature_regular"
-            labelText="Temperature"
+            label="Temperature"
             keyExtractor={unitKeyExtractor}
             modalTitle="Select the desired unit"
             nameExtractor={unitNameExtractor}
@@ -99,7 +99,7 @@ export const OptionsSheet = React.forwardRef<
           />
           <ListComboBox
             icon="top_speed_regular"
-            labelText="Speed"
+            label="Speed"
             keyExtractor={unitKeyExtractor}
             modalTitle="Select the desired unit"
             nameExtractor={unitNameExtractor}
