@@ -16,7 +16,8 @@ export interface IAppBehavior {
 }
 
 export enum AppBehaviorType {
-  Default,
+  Default = "Default",
+  ResetInputsOnCalculate = "Reset inputs on calculate",
 }
 
 export type AppBehaviorCreateInfo = {
@@ -31,12 +32,14 @@ export class DefaultBehavior implements IAppBehavior {
     setActualTemperature: (value: string) => void,
     setWindSpeed: (value: string) => void,
     setPerceivedTemperature: (value: number) => void,
-    onError: (err: Error) => void
+    onError: (err: Error) => void,
+    resetInputOnCalculate: boolean = false
   ) {
     this._setActualTemperatureState = setActualTemperature;
     this._setWindSpeedState = setWindSpeed;
     this._setPerceivedTemperature = setPerceivedTemperature;
     this._onError = onError;
+    this._resetInputOnCalculate = resetInputOnCalculate;
   }
 
   setActualTemperature(text: string): void {
@@ -62,7 +65,10 @@ export class DefaultBehavior implements IAppBehavior {
       );
     } catch (err) {
       this._onError(err as Error);
+      return;
     }
+    this._setActualTemperatureState("");
+    this._setWindSpeedState("");
   }
 
   private _calculateResults(
@@ -84,6 +90,7 @@ export class DefaultBehavior implements IAppBehavior {
   private _setWindSpeedState: (value: string) => void;
   private _setPerceivedTemperature: (value: number) => void;
   private _onError: (err: Error) => void;
+  private _resetInputOnCalculate: boolean;
 }
 
 export function createAppBehavior(
@@ -102,6 +109,14 @@ export function createAppBehavior(
         setWindSpeed,
         setPerceivedTemperature,
         onError
+      );
+    case AppBehaviorType.ResetInputsOnCalculate:
+      return new DefaultBehavior(
+        setActualTemperature,
+        setWindSpeed,
+        setPerceivedTemperature,
+        onError,
+        true
       );
   }
 }

@@ -6,7 +6,14 @@ export function useAppBehavior(
   type: AppBehaviorType,
   options: Options,
   onError: (err: Error) => void
-): [(text: string) => void, (text: string) => void, () => void, number | null] {
+): [
+  (text: string) => void,
+  (text: string) => void,
+  () => void,
+  string,
+  string,
+  number | null
+] {
   const [actualTemperature, setActualTemperatureState] = useState<string>("");
   const [windSpeed, setWindSpeedState] = useState<string>("");
   const [perceivedTemperature, setPerceivedTemperature] = useState<
@@ -56,6 +63,8 @@ export function useAppBehavior(
     setActualTemperature,
     setWindSpeed,
     tryCalculatingResults,
+    actualTemperature,
+    windSpeed,
     perceivedTemperature,
   ];
 }

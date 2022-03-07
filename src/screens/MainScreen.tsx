@@ -32,6 +32,8 @@ export const MainScreen: React.FC = () => {
     setActualTemperature,
     setWindSpeed,
     tryCalculate,
+    actualTemperature,
+    windSpeed,
     perceivedTemperature,
   ] = useAppBehavior(AppBehaviorType.Default, options, onError);
 
@@ -57,6 +59,7 @@ export const MainScreen: React.FC = () => {
             keyboardType="numeric"
             onChangeText={setActualTemperature}
             suffix={options?.temperatureUnit.suffix}
+            value={actualTemperature}
           />
           <ListTextBox
             icon="weather_squalls_regular"
@@ -64,6 +67,7 @@ export const MainScreen: React.FC = () => {
             keyboardType="numeric"
             onChangeText={setWindSpeed}
             suffix={options?.speedUnit.suffix}
+            value={windSpeed}
           />
         </View>
         <View style={styles.footer}>
