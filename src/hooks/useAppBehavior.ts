@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AppBehaviorType,
-  CalculationResult,
+  CalculationResults,
   createAppBehavior,
 } from "../models/AppBehavior";
 import { Options } from "../models/Options";
@@ -16,12 +16,12 @@ export function useAppBehavior({
   () => void,
   string,
   string,
-  CalculationResult,
+  CalculationResults,
   boolean
 ] {
   const [actualTemperature, setActualTemperatureState] = useState<string>("");
   const [windSpeed, setWindSpeedState] = useState<string>("");
-  const [results, setResults] = useState<CalculationResult>(null);
+  const [results, setResults] = useState<CalculationResults>(null);
 
   const appBehavior = useMemo(
     () =>

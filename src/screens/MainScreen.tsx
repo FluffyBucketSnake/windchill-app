@@ -10,38 +10,23 @@ import { IOptionsSheetMethods, OptionsSheet } from "../components/OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
 import { ListText } from "../components/ListText";
 import { useAppBehavior } from "../hooks/useAppBehavior";
+import { Unit } from "../models/Unit";
+import { CalculationResults } from "../models/AppBehavior";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
   const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
 
-  const [error, setError] = useState<Error>();
-
   const [
     setActualTemperature,
     setWindSpeed,
-    tryCalculate,
+    tryCalculatingResults,
     actualTemperature,
     windSpeed,
     results,
     showCalculate,
   ] = useAppBehavior(options);
-
-  const resultsDisplay =
-    results &&
-    (results instanceof Error ? (
-      <Text style={styles.error}>Error: {results && results.message}</Text>
-    ) : (
-      <ListText
-        icon="temperature_regular"
-        hasSeparator={false}
-        label="Perceived temperature"
-        variant="primary"
-      >
-        {`${results.toFixed(2)} ${options.temperatureUnit.suffix}`}
-      </ListText>
-    ));
 
   return (
     <SafeAreaView style={styles.body}>
@@ -51,42 +36,22 @@ export const MainScreen: React.FC = () => {
         style={styles.background}
       />
       <BlurView intensity={100} style={styles.content} tint="dark">
-        <View style={styles.header}>
-          <Text style={styles.headline}>Wind chill calculator</Text>
-          <Text style={styles.caption}>
-            Calculate the perceived temperature by providing the actual
-            temperature and the wind speed
-          </Text>
-        </View>
-        <View style={styles.form}>
-          <ListTextBox
-            icon="temperature_regular"
-            label="Actual temperature"
-            keyboardType="numeric"
-            onChangeText={setActualTemperature}
-            suffix={options?.temperatureUnit.suffix}
-            value={actualTemperature}
-          />
-          <ListTextBox
-            icon="weather_squalls_regular"
-            label="Wind speed"
-            keyboardType="numeric"
-            onChangeText={setWindSpeed}
-            suffix={options?.speedUnit.suffix}
-            value={windSpeed}
-          />
-        </View>
-        <View style={styles.footer}>
-          {resultsDisplay}
-          <View style={styles.buttons}>
-            {showCalculate && (
-              <Button onPress={tryCalculate} style={styles.btnCalculate}>
-                Calculate
-              </Button>
-            )}
-            <IconButton icon="options_filled" onPress={openOptions} />
-          </View>
-        </View>
+        <Header />
+        <InputForm
+          actualTemperature={actualTemperature}
+          setActualTemperature={setActualTemperature}
+          windSpeed={windSpeed}
+          setWindSpeed={setWindSpeed}
+          temperatureUnit={options.temperatureUnit}
+          speedUnit={options.speedUnit}
+        />
+        <Footer
+          onCalculatePress={tryCalculatingResults}
+          onOptionsPress={openOptions}
+          results={results}
+          showCalculateButton={showCalculate}
+          temperatureUnit={options.temperatureUnit}
+        />
         <OptionsSheet
           ref={refOptionsSheet}
           options={options}
@@ -96,6 +61,53 @@ export const MainScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
+
+const Header: React.FC = () => (
+  <View style={styles.header}>
+    <Text style={styles.headline}>Wind chill calculator</Text>
+    <Text style={styles.caption}>
+      Calculate the perceived temperature by providing the actual temperature
+      and the wind speed
+    </Text>
+  </View>
+);
+
+type InputFormProps = {
+  actualTemperature: string;
+  windSpeed: string;
+  setActualTemperature: (text: string) => void;
+  setWindSpeed: (text: string) => void;
+  temperatureUnit: Unit;
+  speedUnit: Unit;
+};
+
+const InputForm: React.FC<InputFormProps> = ({
+  actualTemperature,
+  windSpeed,
+  setActualTemperature,
+  setWindSpeed,
+  temperatureUnit,
+  speedUnit,
+}) => (
+  <View style={styles.form}>
+    <ListTextBox
+      icon="temperature_regular"
+      label="Actual temperature"
+      keyboardType="numeric"
+      onChangeText={setActualTemperature}
+      suffix={temperatureUnit.suffix}
+      value={actualTemperature}
+    />
+    <ListTextBox
+      icon="weather_squalls_regular"
+      label="Wind speed"
+      keyboardType="numeric"
+      onChangeText={setWindSpeed}
+      suffix={speedUnit.suffix}
+      value={windSpeed}
+    />
+  </View>
+);
 
 const styles = StyleSheet.create({
   body: {
@@ -160,3 +172,43 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
 });
+
+type FooterProps = {
+  onCalculatePress: () => void;
+  onOptionsPress: () => void;
+  results: CalculationResults;
+  showCalculateButton: boolean;
+  temperatureUnit: Unit;
+};
+
+const Footer: React.FC<FooterProps> = ({
+  onCalculatePress,
+  onOptionsPress,
+  showCalculateButton,
+  results,
+  temperatureUnit,
+}) => (
+  <View style={styles.footer}>
+    {results &&
+      (results instanceof Error ? (
+        <Text style={styles.error}>Error: {results && results.message}</Text>
+      ) : (
+        <ListText
+          icon="temperature_regular"
+          hasSeparator={false}
+          label="Perceived temperature"
+          variant="primary"
+        >
+          {`${results.toFixed(2)} ${temperatureUnit.suffix}`}
+        </ListText>
+      ))}
+    <View style={styles.buttons}>
+      {showCalculateButton && (
+        <Button onPress={onCalculatePress} style={styles.btnCalculate}>
+          Calculate
+        </Button>
+      )}
+      <IconButton icon="options_filled" onPress={onOptionsPress} />
+    </View>
+  </View>
+);

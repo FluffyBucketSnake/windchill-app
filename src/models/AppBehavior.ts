@@ -28,21 +28,21 @@ export const AppBehaviorTypes = [
   AppBehaviorType.Automatic,
 ];
 
-export type CalculationResult = number | Error | null;
+export type CalculationResults = number | Error | null;
 
 export type AppBehaviorCreateInfo = {
   currentActualTemperature: string;
   setActualTemperature: (value: string) => void;
   currentWindSpeed: string;
   setWindSpeed: (value: string) => void;
-  setResults: (results: CalculationResult) => void;
+  setResults: (results: CalculationResults) => void;
 };
 
 export class DefaultBehavior implements IAppBehavior {
   constructor(
     setActualTemperature: (value: string) => void,
     setWindSpeed: (value: string) => void,
-    setResults: (results: CalculationResult) => void,
+    setResults: (results: CalculationResults) => void,
     resetInputOnCalculate: boolean = false
   ) {
     this._setActualTemperatureState = setActualTemperature;
@@ -66,7 +66,7 @@ export class DefaultBehavior implements IAppBehavior {
     temperatureUnit: Unit,
     speedUnit: Unit
   ): void {
-    let results: CalculationResult;
+    let results: CalculationResults;
     try {
       results = this._calculateResults(
         actualTemperature,
@@ -101,7 +101,7 @@ export class DefaultBehavior implements IAppBehavior {
 
   private _setActualTemperatureState: (value: string) => void;
   private _setWindSpeedState: (value: string) => void;
-  private _setResults: (results: CalculationResult) => void;
+  private _setResults: (results: CalculationResults) => void;
   private _resetInputOnCalculate: boolean;
 }
 
@@ -111,7 +111,7 @@ export class AutomaticBehavior implements IAppBehavior {
     setActualTemperature: (value: string) => void,
     currentWindSpeed: string,
     setWindSpeed: (value: string) => void,
-    setResults: (results: CalculationResult) => void
+    setResults: (results: CalculationResults) => void
   ) {
     this._temperatureUnit = temperatureUnits[0];
     this._speedUnit = speedUnits[0];
@@ -148,7 +148,7 @@ export class AutomaticBehavior implements IAppBehavior {
       this._setResults(null);
       return;
     }
-    let results: CalculationResult;
+    let results: CalculationResults;
     try {
       results = this._calculateResults(
         actualTemperature,
@@ -191,7 +191,7 @@ export class AutomaticBehavior implements IAppBehavior {
   private _speedUnit: Unit;
   private _setActualTemperature: (value: string) => void;
   private _setWindSpeed: (value: string) => void;
-  private _setResults: (results: CalculationResult) => void;
+  private _setResults: (results: CalculationResults) => void;
 }
 
 export function createAppBehavior(
