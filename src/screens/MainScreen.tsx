@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View, Image } from "react-native";
 import { THEME } from "../theme";
@@ -11,49 +17,61 @@ import { DefaultOptions, Options } from "../models/Options";
 import { calculateWindChill } from "../services/calculateWindChill";
 import { ListText } from "../components/ListText";
 import Toast from "react-native-root-toast";
+import { AppBehaviorType, createAppBehavior } from "../models/AppBehavior";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
-  const [actualTemperature, setActualTemperature] = useState<string>("");
-  const [windSpeed, setWindSpeed] = useState<string>("");
+  const [actualTemperature, setActualTemperatureState] = useState<string>("");
+  const [windSpeed, setWindSpeedState] = useState<string>("");
   const [perceivedTemperature, setPerceivedTemperature] = useState<
     number | null
   >(null);
 
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
-
-  const calculateResults = useCallback(() => {
-    const Ta = parseNumber(actualTemperature, "actual temperature");
-    const v = parseNonNegative(windSpeed, "wind speed");
-    const Tp = calculateWindChill(
-      Ta,
-      v,
-      options.temperatureUnit,
-      options.speedUnit
-    );
-    setPerceivedTemperature(Tp);
-  }, [actualTemperature, windSpeed, options, setPerceivedTemperature]);
-  const changeActualTemperature = useCallback(
-    (text: string) => setActualTemperature(text),
-    [setActualTemperature]
-  );
-  const changeWindSpeed = useCallback(
-    (text: string) => setWindSpeed(text),
-    [setWindSpeed]
-  );
   const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
-  const tryCalculate = useCallback(() => {
-    try {
-      calculateResults();
-    } catch (err) {
-      const message = (err as Error).message;
-      Toast.show(message, {
+
+  const onError = useCallback(
+    (err: Error) =>
+      Toast.show(err.message, {
         duration: 5000,
         backgroundColor: THEME.COLORS.DANGER,
         textColor: THEME.COLORS.PRIMARY_FOREGROUND,
-      });
-    }
-  }, [calculateResults]);
+      }),
+    []
+  );
+  const appBehavior = useMemo(
+    () =>
+      createAppBehavior(AppBehaviorType.Default, {
+        setActualTemperature: setActualTemperatureState,
+        setWindSpeed: setWindSpeedState,
+        setPerceivedTemperature,
+        onError,
+      }),
+    [
+      setActualTemperatureState,
+      setWindSpeedState,
+      setPerceivedTemperature,
+      onError,
+    ]
+  );
+  const setActualTemperature = useCallback(
+    (text: string) => appBehavior.setActualTemperature(text),
+    [appBehavior]
+  );
+  const setWindSpeed = useCallback(
+    (text: string) => appBehavior.setWindSpeed(text),
+    [appBehavior]
+  );
+  const tryCalculate = useCallback(
+    () =>
+      appBehavior.tryCalculatingResults(
+        actualTemperature,
+        windSpeed,
+        options.temperatureUnit,
+        options.speedUnit
+      ),
+    [actualTemperature, windSpeed, options]
+  );
 
   useEffect(() => {
     setPerceivedTemperature(null);
@@ -79,14 +97,14 @@ export const MainScreen: React.FC = () => {
             icon="temperature_regular"
             label="Actual temperature"
             keyboardType="numeric"
-            onChangeText={changeActualTemperature}
+            onChangeText={setActualTemperature}
             suffix={options?.temperatureUnit.suffix}
           />
           <ListTextBox
             icon="weather_squalls_regular"
             label="Wind speed"
             keyboardType="numeric"
-            onChangeText={changeWindSpeed}
+            onChangeText={setWindSpeed}
             suffix={options?.speedUnit.suffix}
           />
         </View>
@@ -119,27 +137,6 @@ export const MainScreen: React.FC = () => {
     </SafeAreaView>
   );
 };
-
-function parseNumber(text: string, context: string): number {
-  if (!text) {
-    throw new Error(`Input a different ${context} value.`);
-  }
-  if (!text.match(/^\-?\d+(.\d+)?$/)) {
-    throw new Error(`${capitalizeFirst(context)} is not a valid number.`);
-  }
-  return parseFloat(text);
-}
-
-function parseNonNegative(text: string, context: string): number {
-  const result = parseNumber(text, context);
-  if (result < 0) {
-    throw new Error(`${capitalizeFirst(context)} cannot be negative.`);
-  }
-  return result;
-}
-
-const capitalizeFirst: (text: string) => string = (text) =>
-  `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 
 const styles = StyleSheet.create({
   body: {
