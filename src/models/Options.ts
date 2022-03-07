@@ -1,4 +1,4 @@
-import { AppBehaviorType } from "./AppBehavior";
+import { AppBehaviorType } from "./createAppBehavior";
 import { speedUnits, temperatureUnits, Unit } from "./Unit";
 
 export type Options = {

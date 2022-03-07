@@ -11,7 +11,7 @@ import { ListComboBox } from "./ListComboBox";
 import { THEME } from "../theme";
 import { speedUnits, temperatureUnits, Unit } from "../models/Unit";
 import { DefaultOptions, Options } from "../models/Options";
-import { AppBehaviorType, AppBehaviorTypes } from "../models/AppBehavior";
+import { AppBehaviorType, AppBehaviorTypes } from "../models/createAppBehavior";
 
 export interface IOptionsSheetProps {
   onSave?: (options: Options) => void;

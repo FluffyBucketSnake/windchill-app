@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  AppBehaviorType,
-  CalculationResults,
-  createAppBehavior,
-} from "../models/AppBehavior";
+import { createAppBehavior } from "../models/createAppBehavior";
+import { CalculationResults } from "../models/IAppBehavior";
 import { Options } from "../models/Options";
 
 export function useAppBehavior({

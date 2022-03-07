@@ -11,7 +11,7 @@ import { DefaultOptions, Options } from "../models/Options";
 import { ListText } from "../components/ListText";
 import { useAppBehavior } from "../hooks/useAppBehavior";
 import { Unit } from "../models/Unit";
-import { CalculationResults } from "../models/AppBehavior";
+import { CalculationResults } from "../models/IAppBehavior";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
