@@ -1,20 +1,23 @@
 import React from "react";
 import { IListItemProps, ListItem } from "./ListItem";
-import { ITextBoxProps, TextBox } from "./TextBox";
+import { ITextBoxHandle, ITextBoxProps, TextBox } from "./TextBox";
 
-export const ListTextBox: React.FC<IListItemProps & ITextBoxProps> = ({
-  keyboardType,
-  onChangeText,
-  suffix,
-  value,
-  ...props
-}) => (
-  <ListItem {...props}>
-    <TextBox
-      keyboardType={keyboardType}
-      onChangeText={onChangeText}
-      suffix={suffix}
-      value={value}
-    />
-  </ListItem>
+export type ListTextBoxProps = IListItemProps & ITextBoxProps;
+
+export const ListTextBox = React.forwardRef<ITextBoxHandle, ListTextBoxProps>(
+  (
+    { keyboardType, onChangeText, onSubmitEditing, suffix, value, ...props },
+    ref
+  ) => (
+    <ListItem {...props}>
+      <TextBox
+        keyboardType={keyboardType}
+        onChangeText={onChangeText}
+        onSubmitEditing={onSubmitEditing}
+        suffix={suffix}
+        ref={ref}
+        value={value}
+      />
+    </ListItem>
+  )
 );

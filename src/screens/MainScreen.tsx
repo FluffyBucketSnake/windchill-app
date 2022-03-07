@@ -12,6 +12,7 @@ import { ListText } from "../components/ListText";
 import { useAppBehavior } from "../hooks/useAppBehavior";
 import { Unit } from "../models/Unit";
 import { CalculationResults } from "../models/IAppBehavior";
+import { ITextBoxHandle } from "../components/TextBox";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
@@ -44,6 +45,7 @@ export const MainScreen: React.FC = () => {
           setWindSpeed={setWindSpeed}
           temperatureUnit={options.temperatureUnit}
           speedUnit={options.speedUnit}
+          onSubmit={tryCalculatingResults}
         />
         <Footer
           onCalculatePress={tryCalculatingResults}
@@ -79,6 +81,7 @@ type InputFormProps = {
   setWindSpeed: (text: string) => void;
   temperatureUnit: Unit;
   speedUnit: Unit;
+  onSubmit: () => void;
 };
 
 const InputForm: React.FC<InputFormProps> = ({
@@ -88,26 +91,39 @@ const InputForm: React.FC<InputFormProps> = ({
   setWindSpeed,
   temperatureUnit,
   speedUnit,
-}) => (
-  <View style={styles.form}>
-    <ListTextBox
-      icon="temperature_regular"
-      label="Actual temperature"
-      keyboardType="numeric"
-      onChangeText={setActualTemperature}
-      suffix={temperatureUnit.suffix}
-      value={actualTemperature}
-    />
-    <ListTextBox
-      icon="weather_squalls_regular"
-      label="Wind speed"
-      keyboardType="numeric"
-      onChangeText={setWindSpeed}
-      suffix={speedUnit.suffix}
-      value={windSpeed}
-    />
-  </View>
-);
+  onSubmit,
+}) => {
+  const refSecond = useRef<ITextBoxHandle>(null);
+
+  const focusSecond = useCallback(
+    () => refSecond.current?.focus(),
+    [refSecond]
+  );
+
+  return (
+    <View style={styles.form}>
+      <ListTextBox
+        icon="temperature_regular"
+        label="Actual temperature"
+        keyboardType="numeric"
+        onChangeText={setActualTemperature}
+        onSubmitEditing={focusSecond}
+        suffix={temperatureUnit.suffix}
+        value={actualTemperature}
+      />
+      <ListTextBox
+        icon="weather_squalls_regular"
+        label="Wind speed"
+        keyboardType="numeric"
+        onChangeText={setWindSpeed}
+        onSubmitEditing={onSubmit}
+        ref={refSecond}
+        suffix={speedUnit.suffix}
+        value={windSpeed}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   body: {

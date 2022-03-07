@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useImperativeHandle, useRef } from "react";
 import {
   KeyboardTypeOptions,
   Pressable,
@@ -12,32 +12,39 @@ import { THEME } from "../theme";
 export interface ITextBoxProps {
   keyboardType?: KeyboardTypeOptions;
   onChangeText?: (text: string) => void;
+  onSubmitEditing?: () => void;
   suffix?: string;
   value?: string;
 }
 
-export const TextBox: React.FC<ITextBoxProps> = ({
-  keyboardType,
-  onChangeText,
-  suffix,
-  value,
-}) => {
-  const refTextInput = useRef<TextInput>(null);
-  const focusTextInput = useCallback(() => refTextInput.current?.focus(), []);
+export interface ITextBoxHandle {
+  focus(): void;
+}
 
-  return (
-    <Pressable onPress={focusTextInput} style={styles.view}>
-      <TextInput
-        style={styles.input}
-        value={value}
-        keyboardType={keyboardType}
-        onChangeText={onChangeText}
-        ref={refTextInput}
-      />
-      <Text style={styles.suffix}> {suffix}</Text>
-    </Pressable>
-  );
-};
+export const TextBox = React.forwardRef<ITextBoxHandle, ITextBoxProps>(
+  ({ keyboardType, onChangeText, onSubmitEditing, suffix, value }, ref) => {
+    const refTextInput = useRef<TextInput>(null);
+    const focusTextInput = useCallback(() => refTextInput.current?.focus(), []);
+
+    useImperativeHandle(ref, () => ({
+      focus: () => refTextInput.current?.focus(),
+    }));
+
+    return (
+      <Pressable onPress={focusTextInput} style={styles.view}>
+        <TextInput
+          style={styles.input}
+          value={value}
+          keyboardType={keyboardType}
+          onChangeText={onChangeText}
+          onSubmitEditing={onSubmitEditing}
+          ref={refTextInput}
+        />
+        <Text style={styles.suffix}> {suffix}</Text>
+      </Pressable>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   view: {
