@@ -35,7 +35,7 @@ export const MainScreen: React.FC = () => {
     actualTemperature,
     windSpeed,
     perceivedTemperature,
-  ] = useAppBehavior(options.appBehavior, options, onError);
+  ] = useAppBehavior(options, onError);
 
   return (
     <SafeAreaView style={styles.body}>

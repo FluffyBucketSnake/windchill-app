@@ -3,8 +3,7 @@ import { AppBehaviorType, createAppBehavior } from "../models/AppBehavior";
 import { Options } from "../models/Options";
 
 export function useAppBehavior(
-  type: AppBehaviorType,
-  options: Options,
+  { appBehavior: type, temperatureUnit, speedUnit }: Options,
   onError: (err: Error) => void
 ): [
   (text: string) => void,
@@ -29,6 +28,7 @@ export function useAppBehavior(
         onError,
       }),
     [
+      type,
       setActualTemperatureState,
       setWindSpeedState,
       setPerceivedTemperature,
@@ -49,15 +49,15 @@ export function useAppBehavior(
       appBehavior.tryCalculatingResults(
         actualTemperature,
         windSpeed,
-        options.temperatureUnit,
-        options.speedUnit
+        temperatureUnit,
+        speedUnit
       ),
-    [actualTemperature, windSpeed, options]
+    [actualTemperature, windSpeed, temperatureUnit, speedUnit]
   );
 
   useEffect(() => {
     setPerceivedTemperature(null);
-  }, [options]);
+  }, [temperatureUnit, speedUnit]);
 
   return [
     setActualTemperature,
