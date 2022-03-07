@@ -17,8 +17,13 @@ export interface IAppBehavior {
 
 export enum AppBehaviorType {
   Default = "Default",
-  ResetInputsOnCalculate = "Reset inputs on calculate",
+  ResetInputsOnCalculate = "Reset on calculate",
 }
+
+export const AppBehaviorTypes = [
+  AppBehaviorType.Default,
+  AppBehaviorType.ResetInputsOnCalculate,
+];
 
 export type AppBehaviorCreateInfo = {
   setActualTemperature: (value: string) => void;
@@ -68,8 +73,8 @@ export class DefaultBehavior implements IAppBehavior {
       return;
     }
     if (this._resetInputOnCalculate) {
-    this._setActualTemperatureState("");
-    this._setWindSpeedState("");
+      this._setActualTemperatureState("");
+      this._setWindSpeedState("");
     }
   }
 

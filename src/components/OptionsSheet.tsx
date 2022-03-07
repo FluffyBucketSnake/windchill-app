@@ -11,6 +11,7 @@ import { ListComboBox } from "./ListComboBox";
 import { THEME } from "../theme";
 import { speedUnits, temperatureUnits, Unit } from "../models/Unit";
 import { DefaultOptions, Options } from "../models/Options";
+import { AppBehaviorType, AppBehaviorTypes } from "../models/AppBehavior";
 
 export interface IOptionsSheetProps {
   onSave?: (options: Options) => void;
@@ -32,6 +33,15 @@ export const OptionsSheet = React.forwardRef<
 
   const refBottomSheet = useRef<BottomSheet>(null);
 
+  const changeAppBehavior = useCallback(
+    (behavior: AppBehaviorType) => {
+      setCurrentOptions((old) => ({
+        ...old,
+        appBehavior: behavior,
+      }));
+    },
+    [currentOptions]
+  );
   const changeSpeedUnit = useCallback(
     (unit: Unit) => {
       setCurrentOptions((old) => ({
@@ -68,6 +78,7 @@ export const OptionsSheet = React.forwardRef<
     ({ friendlyName, suffix }: Unit) => `${friendlyName}(${suffix})`,
     []
   );
+  const basicExtractor = useCallback((value: string) => value, []);
 
   useImperativeHandle(ref, () => ({
     present: () => refBottomSheet.current?.expand(),
@@ -82,10 +93,21 @@ export const OptionsSheet = React.forwardRef<
       index={-1}
       onClose={discardChanges}
       ref={refBottomSheet}
-      snapPoints={[224]}
+      snapPoints={[328]}
     >
       <BottomSheetView style={styles.content}>
         <View style={styles.options}>
+          <Text style={styles.title}>General</Text>
+          <ListComboBox
+            label="Operation mode"
+            keyExtractor={basicExtractor}
+            modalTitle="Select the desired unit"
+            nameExtractor={basicExtractor}
+            onChange={changeAppBehavior}
+            options={AppBehaviorTypes}
+            style={styles.lastSectionItem}
+            value={currentOptions.appBehavior}
+          />
           <Text style={styles.title}>Units</Text>
           <ListComboBox
             icon="temperature_regular"
@@ -138,6 +160,9 @@ const styles = StyleSheet.create({
     fontFamily: THEME.FONTS.REGULAR,
     textAlign: "center",
     ...THEME.FONT_SIZES.TITLE,
+  },
+  lastSectionItem: {
+    marginBottom: 16,
   },
   footer: {
     display: "flex",

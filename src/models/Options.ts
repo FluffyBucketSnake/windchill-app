@@ -1,11 +1,14 @@
+import { AppBehaviorType } from "./AppBehavior";
 import { speedUnits, temperatureUnits, Unit } from "./Unit";
 
 export type Options = {
-    temperatureUnit: Unit,
-    speedUnit: Unit,
+  appBehavior: AppBehaviorType;
+  temperatureUnit: Unit;
+  speedUnit: Unit;
 };
 
 export const DefaultOptions: Options = {
-    temperatureUnit: temperatureUnits[0],
-    speedUnit: speedUnits[0],
-}
+  appBehavior: AppBehaviorType.Default,
+  temperatureUnit: temperatureUnits[0],
+  speedUnit: speedUnits[0],
+};
