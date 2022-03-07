@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Text, SafeAreaView, StyleSheet, View, Image } from "react-native";
 import { THEME } from "../theme";
@@ -14,19 +8,13 @@ import { ListTextBox } from "../components/ListTextBox";
 import { BlurView } from "expo-blur";
 import { IOptionsSheetMethods, OptionsSheet } from "../components/OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
-import { calculateWindChill } from "../services/calculateWindChill";
 import { ListText } from "../components/ListText";
 import Toast from "react-native-root-toast";
-import { AppBehaviorType, createAppBehavior } from "../models/AppBehavior";
+import { AppBehaviorType } from "../models/AppBehavior";
+import { useAppBehavior } from "../hooks/useAppBehavior";
 
 export const MainScreen: React.FC = () => {
   const [options, setOptions] = useState<Options>(DefaultOptions);
-  const [actualTemperature, setActualTemperatureState] = useState<string>("");
-  const [windSpeed, setWindSpeedState] = useState<string>("");
-  const [perceivedTemperature, setPerceivedTemperature] = useState<
-    number | null
-  >(null);
-
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
   const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
 
@@ -39,43 +27,13 @@ export const MainScreen: React.FC = () => {
       }),
     []
   );
-  const appBehavior = useMemo(
-    () =>
-      createAppBehavior(AppBehaviorType.Default, {
-        setActualTemperature: setActualTemperatureState,
-        setWindSpeed: setWindSpeedState,
-        setPerceivedTemperature,
-        onError,
-      }),
-    [
-      setActualTemperatureState,
-      setWindSpeedState,
-      setPerceivedTemperature,
-      onError,
-    ]
-  );
-  const setActualTemperature = useCallback(
-    (text: string) => appBehavior.setActualTemperature(text),
-    [appBehavior]
-  );
-  const setWindSpeed = useCallback(
-    (text: string) => appBehavior.setWindSpeed(text),
-    [appBehavior]
-  );
-  const tryCalculate = useCallback(
-    () =>
-      appBehavior.tryCalculatingResults(
-        actualTemperature,
-        windSpeed,
-        options.temperatureUnit,
-        options.speedUnit
-      ),
-    [actualTemperature, windSpeed, options]
-  );
 
-  useEffect(() => {
-    setPerceivedTemperature(null);
-  }, [options]);
+  const [
+    setActualTemperature,
+    setWindSpeed,
+    tryCalculate,
+    perceivedTemperature,
+  ] = useAppBehavior(AppBehaviorType.Default, options, onError);
 
   return (
     <SafeAreaView style={styles.body}>
