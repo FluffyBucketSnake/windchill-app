@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextStyle, ViewProps } from "react-native";
+import { StyleSheet, TextStyle, ViewProps, ViewStyle } from "react-native";
 import { BaseListItem } from "./BaseListItem";
 import { FluentUIIcon, FluentUIIconName } from "./FluentUIIcon";
 import { THEME } from "../theme";
@@ -10,6 +10,7 @@ export interface IListItemProps {
   icon?: FluentUIIconName;
   hasSeparator?: boolean;
   label: string;
+  style?: ViewStyle;
   variant?: ListItemVariant;
 }
 
@@ -19,6 +20,7 @@ export const ListItem: React.FC<ListItemProps> = ({
   children,
   icon,
   label,
+  style,
   variant = "default",
   ...props
 }) => {
@@ -33,7 +35,7 @@ export const ListItem: React.FC<ListItemProps> = ({
       iconComponent={iconComponent}
       labelStyle={variantStyles.label}
       labelText={label}
-      style={variantStyles.view}
+      style={[variantStyles.view, style]}
       {...props}
     >
       {children}
