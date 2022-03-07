@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     ...THEME.FONT_SIZES.BODY,
   },
   buttons: {
+    alignItems: "flex-end",
     display: "flex",
     justifyContent: "flex-end",
     flexDirection: "row",

@@ -20,6 +20,6 @@ export const IconButton: React.FC<IIconButtonProps> = ({ icon, onPress }) => (
 
 const styles = StyleSheet.create({
   container: {
-    padding: 6,
+    padding: 8,
   },
 });
