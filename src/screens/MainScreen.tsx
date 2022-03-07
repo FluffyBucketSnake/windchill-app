@@ -75,7 +75,7 @@ export const MainScreen: React.FC = () => {
               }`}
             </ListText>
           ) : (
-            <Text style={styles.error}>{error && error.message}</Text>
+            <Text style={styles.error}>Error: {error && error.message}</Text>
           )}
           <View style={styles.buttons}>
             {showCalculate && (
@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     color: THEME.COLORS.DANGER,
     fontFamily: THEME.FONTS.MEDIUM,
     minHeight: 48,
+    textAlignVertical: "center",
     textAlign: "center",
     ...THEME.FONT_SIZES.BODY,
   },
