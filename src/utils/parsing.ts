@@ -1,6 +1,6 @@
 export function parseNumber(text: string, context: string): number {
   if (!text) {
-    throw new Error(`Input a different ${context} value.`);
+    throw new Error(`Input a ${context} value.`);
   }
   if (!text.match(/^\-?\d+(.\d+)?$/)) {
     throw new Error(`${capitalizeFirst(context)} is not a valid number.`);
