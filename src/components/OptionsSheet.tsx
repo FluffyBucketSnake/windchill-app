@@ -5,9 +5,9 @@ import React, {
   useState,
 } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Button, ButtonVariant } from "../components/Button";
+import { Button, ButtonVariant } from "./Button";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { ListComboBox } from "../components/ListComboBox";
+import { ListComboBox } from "./ListComboBox";
 import { THEME } from "../theme";
 import { speedUnits, temperatureUnits, Unit } from "../models/Unit";
 import { DefaultOptions, Options } from "../models/Options";

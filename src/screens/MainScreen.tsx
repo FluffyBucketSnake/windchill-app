@@ -6,7 +6,7 @@ import { Button } from "../components/Button";
 import { IconButton } from "../components/IconButton";
 import { ListTextBox } from "../components/ListTextBox";
 import { BlurView } from "expo-blur";
-import { IOptionsSheetMethods, OptionsSheet } from "./OptionsSheet";
+import { IOptionsSheetMethods, OptionsSheet } from "../components/OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
 import { calculateWindChill } from "../services/calculateWindChill";
 import { ListText } from "../components/ListText";
