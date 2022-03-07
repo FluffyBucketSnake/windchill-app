@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "windchill-app",
-    "slug": "windchill-app",
-    "version": "1.0.0",
+    "name": "Wind Chill Calculator",
+    "slug": "windchill-calculator",
+    "version": "1.2.0",
     "entryPoint": "./src/App.tsx",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "",
+    "githubUrl": "https://github.com/FluffyBucketSnake/windchill-app"
   }
 }
