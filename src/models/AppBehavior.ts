@@ -67,8 +67,10 @@ export class DefaultBehavior implements IAppBehavior {
       this._onError(err as Error);
       return;
     }
+    if (this._resetInputOnCalculate) {
     this._setActualTemperatureState("");
     this._setWindSpeedState("");
+    }
   }
 
   private _calculateResults(
