@@ -12,7 +12,7 @@ export interface IAppBehavior {
     windSpeedUnit: Unit
   ): void;
 
-  get showCalculate(): boolean;
+  get showCalculateButton(): boolean;
 }
 
 export enum AppBehaviorType {
@@ -89,7 +89,7 @@ export class DefaultBehavior implements IAppBehavior {
     return calculateWindChill(Ta, v, temperatureUnit, speedUnit);
   }
 
-  get showCalculate(): boolean {
+  get showCalculateButton(): boolean {
     return true;
   }
 
