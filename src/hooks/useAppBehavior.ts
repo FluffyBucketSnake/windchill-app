@@ -1,24 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { AppBehaviorType, createAppBehavior } from "../models/AppBehavior";
+import {
+  AppBehaviorType,
+  CalculationResult,
+  createAppBehavior,
+} from "../models/AppBehavior";
 import { Options } from "../models/Options";
 
-export function useAppBehavior(
-  { appBehavior: type, temperatureUnit, speedUnit }: Options,
-  onError: (err: Error) => void
-): [
+export function useAppBehavior({
+  appBehavior: type,
+  temperatureUnit,
+  speedUnit,
+}: Options): [
   (text: string) => void,
   (text: string) => void,
   () => void,
   string,
   string,
-  number | null,
+  CalculationResult,
   boolean
 ] {
   const [actualTemperature, setActualTemperatureState] = useState<string>("");
   const [windSpeed, setWindSpeedState] = useState<string>("");
-  const [perceivedTemperature, setPerceivedTemperature] = useState<
-    number | null
-  >(null);
+  const [results, setResults] = useState<CalculationResult>(null);
 
   const appBehavior = useMemo(
     () =>
@@ -27,16 +30,9 @@ export function useAppBehavior(
         setActualTemperature: setActualTemperatureState,
         currentWindSpeed: windSpeed,
         setWindSpeed: setWindSpeedState,
-        setPerceivedTemperature,
-        onError,
+        setResults,
       }),
-    [
-      type,
-      setActualTemperatureState,
-      setWindSpeedState,
-      setPerceivedTemperature,
-      onError,
-    ]
+    [type, setActualTemperatureState, setWindSpeedState, setResults]
   );
 
   const setActualTemperature = useCallback(
@@ -68,7 +64,7 @@ export function useAppBehavior(
     tryCalculatingResults,
     actualTemperature,
     windSpeed,
-    perceivedTemperature,
+    results,
     appBehavior.showCalculateButton,
   ];
 }

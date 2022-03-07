@@ -24,9 +24,24 @@ export const MainScreen: React.FC = () => {
     tryCalculate,
     actualTemperature,
     windSpeed,
-    perceivedTemperature,
+    results,
     showCalculate,
-  ] = useAppBehavior(options, setError);
+  ] = useAppBehavior(options);
+
+  const resultsDisplay =
+    results &&
+    (results instanceof Error ? (
+      <Text style={styles.error}>Error: {results && results.message}</Text>
+    ) : (
+      <ListText
+        icon="temperature_regular"
+        hasSeparator={false}
+        label="Perceived temperature"
+        variant="primary"
+      >
+        {`${results.toFixed(2)} ${options.temperatureUnit.suffix}`}
+      </ListText>
+    ));
 
   return (
     <SafeAreaView style={styles.body}>
@@ -62,20 +77,7 @@ export const MainScreen: React.FC = () => {
           />
         </View>
         <View style={styles.footer}>
-          {perceivedTemperature !== null ? (
-            <ListText
-              icon="temperature_regular"
-              hasSeparator={false}
-              label="Perceived temperature"
-              variant="primary"
-            >
-              {`${perceivedTemperature.toFixed(2)} ${
-                options.temperatureUnit.suffix
-              }`}
-            </ListText>
-          ) : (
-            <Text style={styles.error}>Error: {error && error.message}</Text>
-          )}
+          {resultsDisplay}
           <View style={styles.buttons}>
             {showCalculate && (
               <Button onPress={tryCalculate} style={styles.btnCalculate}>
