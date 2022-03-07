@@ -22,7 +22,7 @@ This app is based on an [app idea of similar name.](https://github.com/florinpop
 
 - [x] User will be prompted to enter new data values if `Calculate` is pressed without first changing at least one of the input fields
 
-- [ ] User will see an updated wind chill factor whenever new actual temperature or wind speed values are entered, without being required to click the `Calculate` button
+- [x] User will see an updated wind chill factor whenever new actual temperature or wind speed values are entered, without being required to click the `Calculate` button
 
 ## Tools
 
