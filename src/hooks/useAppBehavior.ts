@@ -23,8 +23,6 @@ export function useAppBehavior(
   const appBehavior = useMemo(
     () =>
       createAppBehavior(type, {
-        temperatureUnit,
-        speedUnit,
         setActualTemperature: setActualTemperatureState,
         setWindSpeed: setWindSpeedState,
         setPerceivedTemperature,
@@ -32,8 +30,6 @@ export function useAppBehavior(
       }),
     [
       type,
-      temperatureUnit,
-      speedUnit,
       setActualTemperatureState,
       setWindSpeedState,
       setPerceivedTemperature,
@@ -61,8 +57,8 @@ export function useAppBehavior(
   );
 
   useEffect(() => {
-    setPerceivedTemperature(null);
-  }, [temperatureUnit, speedUnit]);
+    appBehavior.changeUnits(temperatureUnit, speedUnit);
+  }, [appBehavior, temperatureUnit, speedUnit]);
 
   return [
     setActualTemperature,
