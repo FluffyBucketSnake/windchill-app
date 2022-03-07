@@ -18,17 +18,21 @@ export interface IAppBehavior {
 export enum AppBehaviorType {
   Default = "Default",
   ResetInputsOnCalculate = "Reset on calculate",
+  Automatic = "Automatic",
 }
 
 export const AppBehaviorTypes = [
   AppBehaviorType.Default,
   AppBehaviorType.ResetInputsOnCalculate,
+  AppBehaviorType.Automatic,
 ];
 
 export type AppBehaviorCreateInfo = {
+  temperatureUnit: Unit;
+  speedUnit: Unit;
   setActualTemperature: (value: string) => void;
   setWindSpeed: (value: string) => void;
-  setPerceivedTemperature: (value: number) => void;
+  setPerceivedTemperature: (value: number | null) => void;
   onError: (err: Error) => void;
 };
 
@@ -100,9 +104,95 @@ export class DefaultBehavior implements IAppBehavior {
   private _resetInputOnCalculate: boolean;
 }
 
+export class AutomaticBehavior implements IAppBehavior {
+  constructor(
+    temperatureUnit: Unit,
+    speedUnit: Unit,
+    setActualTemperature: (value: string) => void,
+    setWindSpeed: (value: string) => void,
+    setPerceivedTemperature: (value: number | null) => void,
+    onError: (err: Error) => void
+  ) {
+    this._setActualTemperature = setActualTemperature;
+    this._setWindSpeed = setWindSpeed;
+    this._temperatureUnit = temperatureUnit;
+    this._speedUnit = speedUnit;
+    this._actualTemperature = "";
+    this._windSpeed = "";
+    this._setPerceivedTemperature = setPerceivedTemperature;
+    this._onError = onError;
+  }
+
+  setActualTemperature(text: string): void {
+    this._actualTemperature = text;
+    this._setActualTemperature(text);
+    this._callTryCalculateResults();
+  }
+  setWindSpeed(text: string): void {
+    this._windSpeed = text;
+    this._setWindSpeed(text);
+    this._callTryCalculateResults();
+  }
+  tryCalculatingResults(
+    actualTemperature: string,
+    windSpeed: string,
+    temperatureUnit: Unit,
+    speedUnit: Unit
+  ): void {
+    try {
+      this._setPerceivedTemperature(
+        this._calculateResults(
+          actualTemperature,
+          windSpeed,
+          temperatureUnit,
+          speedUnit
+        )
+      );
+    } catch (err) {
+      this._onError(err as Error);
+      this._setPerceivedTemperature(null);
+      return;
+    }
+  }
+
+  private _callTryCalculateResults() {
+    this.tryCalculatingResults(
+      this._actualTemperature,
+      this._windSpeed,
+      this._temperatureUnit,
+      this._speedUnit
+    );
+  }
+  private _calculateResults(
+    actualTemperature: string,
+    windSpeed: string,
+    temperatureUnit: Unit,
+    speedUnit: Unit
+  ): number {
+    const Ta = parseNumber(actualTemperature, "actual temperature");
+    const v = parseNonNegative(windSpeed, "wind speed");
+    return calculateWindChill(Ta, v, temperatureUnit, speedUnit);
+  }
+
+  get showCalculateButton(): boolean {
+    return false;
+  }
+
+  private _actualTemperature: string;
+  private _windSpeed: string;
+  private _temperatureUnit: Unit;
+  private _speedUnit: Unit;
+  private _setActualTemperature: (value: string) => void;
+  private _setWindSpeed: (value: string) => void;
+  private _setPerceivedTemperature: (value: number | null) => void;
+  private _onError: (err: Error) => void;
+}
+
 export function createAppBehavior(
   type: AppBehaviorType,
   {
+    temperatureUnit,
+    speedUnit,
     setActualTemperature,
     setWindSpeed,
     setPerceivedTemperature,
@@ -124,6 +214,15 @@ export function createAppBehavior(
         setPerceivedTemperature,
         onError,
         true
+      );
+    case AppBehaviorType.Automatic:
+      return new AutomaticBehavior(
+        temperatureUnit,
+        speedUnit,
+        setActualTemperature,
+        setWindSpeed,
+        setPerceivedTemperature,
+        onError
       );
   }
 }

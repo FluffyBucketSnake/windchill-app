@@ -11,7 +11,8 @@ export function useAppBehavior(
   () => void,
   string,
   string,
-  number | null
+  number | null,
+  boolean
 ] {
   const [actualTemperature, setActualTemperatureState] = useState<string>("");
   const [windSpeed, setWindSpeedState] = useState<string>("");
@@ -22,6 +23,8 @@ export function useAppBehavior(
   const appBehavior = useMemo(
     () =>
       createAppBehavior(type, {
+        temperatureUnit,
+        speedUnit,
         setActualTemperature: setActualTemperatureState,
         setWindSpeed: setWindSpeedState,
         setPerceivedTemperature,
@@ -29,6 +32,8 @@ export function useAppBehavior(
       }),
     [
       type,
+      temperatureUnit,
+      speedUnit,
       setActualTemperatureState,
       setWindSpeedState,
       setPerceivedTemperature,
@@ -66,5 +71,6 @@ export function useAppBehavior(
     actualTemperature,
     windSpeed,
     perceivedTemperature,
+    appBehavior.showCalculateButton,
   ];
 }

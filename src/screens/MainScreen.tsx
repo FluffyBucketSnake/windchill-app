@@ -35,6 +35,7 @@ export const MainScreen: React.FC = () => {
     actualTemperature,
     windSpeed,
     perceivedTemperature,
+    showCalculate,
   ] = useAppBehavior(options, onError);
 
   return (
@@ -84,9 +85,11 @@ export const MainScreen: React.FC = () => {
             </ListText>
           )}
           <View style={styles.buttons}>
-            <Button onPress={tryCalculate} style={styles.btnCalculate}>
-              Calculate
-            </Button>
+            {showCalculate && (
+              <Button onPress={tryCalculate} style={styles.btnCalculate}>
+                Calculate
+              </Button>
+            )}
             <IconButton icon="options_filled" onPress={openOptions} />
           </View>
         </View>
@@ -146,6 +149,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     display: "flex",
+    justifyContent: "flex-end",
     flexDirection: "row",
     marginTop: 16,
   },
