@@ -10,7 +10,6 @@ import { IOptionsSheetMethods, OptionsSheet } from "../components/OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
 import { ListText } from "../components/ListText";
 import Toast from "react-native-root-toast";
-import { AppBehaviorType } from "../models/AppBehavior";
 import { useAppBehavior } from "../hooks/useAppBehavior";
 
 export const MainScreen: React.FC = () => {
@@ -18,15 +17,7 @@ export const MainScreen: React.FC = () => {
   const refOptionsSheet = useRef<IOptionsSheetMethods>(null);
   const openOptions = useCallback(() => refOptionsSheet.current?.present(), []);
 
-  const onError = useCallback(
-    (err: Error) =>
-      Toast.show(err.message, {
-        duration: 5000,
-        backgroundColor: THEME.COLORS.DANGER,
-        textColor: THEME.COLORS.PRIMARY_FOREGROUND,
-      }),
-    []
-  );
+  const [error, setError] = useState<Error>();
 
   const [
     setActualTemperature,
@@ -36,7 +27,7 @@ export const MainScreen: React.FC = () => {
     windSpeed,
     perceivedTemperature,
     showCalculate,
-  ] = useAppBehavior(options, onError);
+  ] = useAppBehavior(options, setError);
 
   return (
     <SafeAreaView style={styles.body}>
@@ -72,7 +63,7 @@ export const MainScreen: React.FC = () => {
           />
         </View>
         <View style={styles.footer}>
-          {perceivedTemperature !== null && (
+          {perceivedTemperature !== null ? (
             <ListText
               icon="temperature_regular"
               hasSeparator={false}
@@ -83,6 +74,8 @@ export const MainScreen: React.FC = () => {
                 options.temperatureUnit.suffix
               }`}
             </ListText>
+          ) : (
+            <Text style={styles.error}>{error && error.message}</Text>
           )}
           <View style={styles.buttons}>
             {showCalculate && (
@@ -146,6 +139,13 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     marginHorizontal: "auto",
+  },
+  error: {
+    color: THEME.COLORS.DANGER,
+    fontFamily: THEME.FONTS.MEDIUM,
+    minHeight: 48,
+    textAlign: "center",
+    ...THEME.FONT_SIZES.BODY,
   },
   buttons: {
     display: "flex",
