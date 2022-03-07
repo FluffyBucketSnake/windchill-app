@@ -23,7 +23,9 @@ export function useAppBehavior(
   const appBehavior = useMemo(
     () =>
       createAppBehavior(type, {
+        currentActualTemperature: actualTemperature,
         setActualTemperature: setActualTemperatureState,
+        currentWindSpeed: windSpeed,
         setWindSpeed: setWindSpeedState,
         setPerceivedTemperature,
         onError,

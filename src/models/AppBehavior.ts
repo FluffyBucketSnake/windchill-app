@@ -29,7 +29,9 @@ export const AppBehaviorTypes = [
 ];
 
 export type AppBehaviorCreateInfo = {
+  currentActualTemperature: string;
   setActualTemperature: (value: string) => void;
+  currentWindSpeed: string;
   setWindSpeed: (value: string) => void;
   setPerceivedTemperature: (value: number | null) => void;
   onError: (err: Error) => void;
@@ -108,7 +110,9 @@ export class DefaultBehavior implements IAppBehavior {
 
 export class AutomaticBehavior implements IAppBehavior {
   constructor(
+    currentActualTemperature: string,
     setActualTemperature: (value: string) => void,
+    currentWindSpeed: string,
     setWindSpeed: (value: string) => void,
     setPerceivedTemperature: (value: number | null) => void,
     onError: (err: Error) => void
@@ -117,8 +121,8 @@ export class AutomaticBehavior implements IAppBehavior {
     this._speedUnit = speedUnits[0];
     this._setActualTemperature = setActualTemperature;
     this._setWindSpeed = setWindSpeed;
-    this._actualTemperature = "";
-    this._windSpeed = "";
+    this._actualTemperature = currentActualTemperature;
+    this._windSpeed = currentWindSpeed;
     this._setPerceivedTemperature = setPerceivedTemperature;
     this._onError = onError;
   }
@@ -197,7 +201,9 @@ export class AutomaticBehavior implements IAppBehavior {
 export function createAppBehavior(
   type: AppBehaviorType,
   {
+    currentActualTemperature,
     setActualTemperature,
+    currentWindSpeed,
     setWindSpeed,
     setPerceivedTemperature,
     onError,
@@ -221,7 +227,9 @@ export function createAppBehavior(
       );
     case AppBehaviorType.Automatic:
       return new AutomaticBehavior(
+        currentActualTemperature,
         setActualTemperature,
+        currentWindSpeed,
         setWindSpeed,
         setPerceivedTemperature,
         onError
