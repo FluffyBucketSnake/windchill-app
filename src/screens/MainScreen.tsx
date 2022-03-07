@@ -9,7 +9,6 @@ import { BlurView } from "expo-blur";
 import { IOptionsSheetMethods, OptionsSheet } from "../components/OptionsSheet";
 import { DefaultOptions, Options } from "../models/Options";
 import { ListText } from "../components/ListText";
-import Toast from "react-native-root-toast";
 import { useAppBehavior } from "../hooks/useAppBehavior";
 
 export const MainScreen: React.FC = () => {
